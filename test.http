@@ -9,8 +9,8 @@ POST http://localhost:12345/hook/simple
 Content-Type: application/json
 
 {
-  "URL": "https://github.com/yourGithubUserName/yourRepo.git",
-  "REV": "fd1245758904390c4b474bb7842b473b6cbe92f0"
+  "URL": "https://github.com/Oppodelldog/simple-ci.git",
+  "REV": "6f9982b8c58a09244929d01f678eb87ca6edcd02"
 }
 
 ###

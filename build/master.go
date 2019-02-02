@@ -6,10 +6,12 @@ import (
 	"time"
 )
 
-type postBuildFunc func(build Build) error
-type preBuildFunc func(build Build) error
+const preBuildNotifyName = "pre"
+const postBuildNotifyName = "post"
 
-func New(repoURL string, commit string, originator string, preBuild preBuildFunc, postBuild postBuildFunc) {
+type NotificationFunc func(build Build) error
+
+func New(repoURL string, commit string, originator string, customPreBuildNotify NotificationFunc, customPostBuildNotify NotificationFunc) {
 	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Hour*2))
 
 	buildID, err := newUUID()
@@ -20,23 +22,18 @@ func New(repoURL string, commit string, originator string, preBuild preBuildFunc
 	newBuild := &Build{
 		ID:         buildID,
 		Originator: originator,
-		StartedAt:  time.Now(),
 		RepoURL:    repoURL,
 		CommitHash: commit,
+		StartedAt:  time.Now(),
+		FinishedAt: time.Time{},
+		Error:      "",
 		Context:    ctx,
 		CancelFunc: cancel,
 	}
 
 	buildQueue = append(buildQueue, newBuild)
 
-	if preBuild != nil {
-		err = preBuild(*newBuild)
-		if err != nil {
-			logrus.Errorf("aborting build due to error during pre-build action: %v", err)
-			newBuild.Error = err.Error()
-			return
-		}
-	}
+	triggerNotifyApi(ctx, preBuildNotifyName, customPreBuildNotify, *newBuild)
 
 	err = startBuild(ctx, repoURL, commit)
 	if err != nil {
@@ -45,12 +42,7 @@ func New(repoURL string, commit string, originator string, preBuild preBuildFunc
 	}
 	newBuild.FinishedAt = time.Now()
 
-	if postBuild != nil {
-		err = postBuild(*newBuild)
-		if err != nil {
-			logrus.Errorf("error during post-build action: %v", err)
-		}
-	}
+	triggerNotifyApi(ctx, postBuildNotifyName, customPostBuildNotify, *newBuild)
 }
 
 func startBuild(ctx context.Context, repoURL, buildRev string) error {

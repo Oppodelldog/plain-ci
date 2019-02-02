@@ -22,7 +22,7 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 		return err
 	}
 
-	ciScript := path.Join(repoDir, "build", "ci.sh")
+	ciScript := path.Join(repoDir, ".build", "ci.sh")
 
 	buildLogFile := path.Join(buildsDir, fmt.Sprintf("%v.txt", buildNo))
 	f, err := os.OpenFile(buildLogFile, os.O_WRONLY|os.O_CREATE, 0666)
