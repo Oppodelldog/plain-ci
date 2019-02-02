@@ -1,11 +1,11 @@
-#simple-ci
+# simple-ci
 > just another continuous integration server
 
 So what are the minimalistic features of a ci server?
 
 * clone git repository
 * checkout a commit
-* execute a build script
+* execute a build script (build/ci.sh)
 * trigger some API before and after a build
 
 So that's what this project is about.
