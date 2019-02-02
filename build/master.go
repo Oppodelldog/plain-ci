@@ -33,7 +33,7 @@ func New(repoURL string, commit string, originator string, customPreBuildNotify 
 
 	buildQueue = append(buildQueue, newBuild)
 
-	triggerNotifyApi(ctx, preBuildNotifyName, customPreBuildNotify, *newBuild)
+	triggerNotifyApi(ctx, preBuildNotifyName, customPreBuildNotify, *newBuild, getPreNotificationScriptsDir())
 
 	err = startBuild(ctx, repoURL, commit)
 	if err != nil {
@@ -42,7 +42,7 @@ func New(repoURL string, commit string, originator string, customPreBuildNotify 
 	}
 	newBuild.FinishedAt = time.Now()
 
-	triggerNotifyApi(ctx, postBuildNotifyName, customPostBuildNotify, *newBuild)
+	triggerNotifyApi(ctx, postBuildNotifyName, customPostBuildNotify, *newBuild, getPostNotificationScriptsDir())
 }
 
 func startBuild(ctx context.Context, repoURL, buildRev string) error {

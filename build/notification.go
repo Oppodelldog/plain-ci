@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func triggerNotifyApi(ctx context.Context, buildStepName string, postBuild NotificationFunc, build Build) {
+func triggerNotifyApi(ctx context.Context, buildStepName string, postBuild NotificationFunc, build Build, scriptDir string) {
 	if postBuild != nil {
 		err := postBuild(build)
 		if err != nil {
@@ -17,7 +17,7 @@ func triggerNotifyApi(ctx context.Context, buildStepName string, postBuild Notif
 		}
 	}
 
-	err := simpleNotification(ctx, getPostNotificationScriptsDir(), build)
+	err := simpleNotification(ctx, scriptDir, build)
 	if err != nil {
 		logrus.Errorf("error during %s-build action: %v", buildStepName, err)
 	}

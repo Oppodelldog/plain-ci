@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"os"
 )
@@ -16,7 +17,7 @@ var GithubToken string
 
 func init() {
 
-	BuildDir = getEnv("SIMPLE_CI_BUILD_DIR", "/tmp")
+	BuildDir = getEnv("SIMPLE_CI_BUILD_DIR", "/tmp/simple-ci")
 	ServerPort = getEnv("SIMPLE_CI_SERVER_PORT", "12345")
 	GithubToken = getEnv("SIMPLE_CI_GITHUB_TOKEN", "")
 
@@ -26,6 +27,11 @@ func init() {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		logrus.SetLevel(loglevel)
+	}
+
+	err = os.MkdirAll(BuildDir, 0766)
+	if err != nil {
+		panic(fmt.Sprintf("could not create buildDir '%s': %v", BuildDir, err))
 	}
 }
 

@@ -16,7 +16,7 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 	logrus.Infof("Starting build %v", buildNo)
 
 	repoDir := getRepoPath(repoURL)
-	buildsDir := getBuildsPath(repoURL)
+	buildsDir := getBuildLogPath(repoURL)
 	err := ensureDir(buildsDir)
 	if err != nil {
 		return err
@@ -60,6 +60,8 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 	if err != nil {
 		writeBuildFinishError(f, err)
 		return err
+	} else {
+		writeBuildFinishSuccess(f)
 	}
 
 	return nil
@@ -68,11 +70,12 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 func writeBuildFinishError(f io.Writer, err error) {
 	writeSeperator(f)
 	_, _ = fmt.Fprintf(f, "error: %v\n", err)
-	writeBuildFailed(f)
+	_, _ = fmt.Fprint(f, "BUILD FAILED")
 }
 
-func writeBuildFailed(f io.Writer) {
-	_, _ = fmt.Fprint(f, "BUILD FAILED")
+func writeBuildFinishSuccess(f io.Writer) {
+	writeSeperator(f)
+	_, _ = fmt.Fprint(f, "BUILD SUCCESS")
 }
 
 func writeSeperator(f io.Writer) {

@@ -20,7 +20,7 @@ type Build struct {
 	CancelFunc context.CancelFunc `json:"-"`
 }
 
-func GetBuilds() []Build {
+func GetBuildQueueList() []Build {
 	var newBuilds []Build
 	for _, build := range buildQueue {
 		newBuilds = append(newBuilds, *build)

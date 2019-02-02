@@ -11,7 +11,7 @@ func getRepoPath(repoUrl string) string {
 	return filepath.Join(getPath(repoUrl), "repo")
 }
 
-func getBuildsPath(repoUrl string) string {
+func getBuildLogPath(repoUrl string) string {
 	return filepath.Join(getPath(repoUrl), "builds")
 }
 

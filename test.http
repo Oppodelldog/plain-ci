@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
   "URL": "https://github.com/Oppodelldog/simple-ci.git",
-  "REV": "6f9982b8c58a09244929d01f678eb87ca6edcd02"
+  "REV": "ba99de688acc32fb4c0778b9b5b74e8ab9a881eb"
 }
 
 ###
@@ -20,7 +20,25 @@ Accept: application/json
 
 ###
 
-GET http://localhost:12345/queue/abort/171e21a7b6244253bf7c6e23d429e739
+GET http://localhost:12345/queue/abort/a44b531011324be3867c6c6de47e7685
+Accept: application/json
+
+###
+# list all build numbers
+
+GET http://localhost:12345/build
+Accept: application/json
+
+###
+# list all build numbers for a repository
+
+GET http://localhost:12345/build/https___github.com_Oppodelldog_simple-ci.git
+Accept: application/json
+
+###
+# get the log for one build
+
+GET http://localhost:12345/build/https___github.com_Oppodelldog_simple-ci.git/3
 Accept: application/json
 
 ###

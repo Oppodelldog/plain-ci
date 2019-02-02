@@ -21,9 +21,9 @@ func newUUID() (string, error) {
 }
 
 func getNextBuildNo(repoUrl string) (int, error) {
-	buildsDir := getBuildsPath(repoUrl)
+	buildsDir := getBuildLogPath(repoUrl)
 	if _, err := os.Stat(buildsDir); os.IsNotExist(err) {
-		return 0, nil
+		return 1, nil
 	}
 
 	files, err := ioutil.ReadDir(buildsDir)
