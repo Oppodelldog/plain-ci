@@ -1,0 +1,26 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://localhost:12345/hook/simple
+Content-Type: application/json
+
+{
+  "URL": "https://github.com/yourGithubUserName/yourRepo.git",
+  "REV": "fd1245758904390c4b474bb7842b473b6cbe92f0"
+}
+
+###
+
+GET http://localhost:12345/queue
+Accept: application/json
+
+###
+
+GET http://localhost:12345/queue/abort/171e21a7b6244253bf7c6e23d429e739
+Accept: application/json
+
+###
