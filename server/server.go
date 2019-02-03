@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"github.com/Oppodelldog/simpleci/config"
 	"github.com/sirupsen/logrus"
@@ -9,7 +8,7 @@ import (
 	"strings"
 )
 
-func startHttpServer(ctx context.Context) error {
+func startHttpServer(wait chan bool) *http.Server {
 
 	addr := fmt.Sprintf("0.0.0.0:%v", config.ServerPort)
 	logrus.Infof("binding http on %v", addr)
@@ -23,14 +22,13 @@ func startHttpServer(ctx context.Context) error {
 	}
 
 	go func() {
-		<-ctx.Done()
-		err := srv.Close()
-		if err != nil {
-			logrus.Errorf("error closing http server: %v", err)
+		if err := srv.ListenAndServe(); err != nil {
+			logrus.Errorf("error running the server: %v", err)
+			close(wait)
 		}
 	}()
 
-	return srv.ListenAndServe()
+	return srv
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request) {

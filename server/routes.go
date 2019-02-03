@@ -1,9 +1,13 @@
 package server
 
-import "github.com/gorilla/mux"
+import (
+	"github.com/gorilla/mux"
+)
 
 func newRouter() *mux.Router {
 	m := mux.NewRouter()
+	m.HandleFunc("/healthcheck", healthcheck)
+
 	m.HandleFunc("/hook/simple", hookSimple)
 	m.HandleFunc("/hook/github", hookGithub)
 

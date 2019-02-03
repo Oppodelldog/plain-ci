@@ -2,40 +2,44 @@ package server
 
 import (
 	"context"
+	"github.com/Oppodelldog/simpleci/config"
 	"github.com/sirupsen/logrus"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func Start() {
-	httpWait := make(chan bool)
-	httpsWait := make(chan bool)
+
 	sigChannel := make(chan os.Signal)
 	signal.Notify(sigChannel, os.Interrupt, syscall.SIGTERM)
 
-	ctx, cancel := context.WithCancel(context.Background())
+	httpWait := make(chan bool)
+	httpServer := startHttpServer(httpWait)
 
-	go func() {
-		if err := startHttpServer(ctx); err != nil {
-			logrus.Errorf("error running the server: %v", err)
-		}
-		close(httpWait)
-	}()
-
-	go func() {
-		if err := startHttpsServer(ctx); err != nil {
-			logrus.Errorf("error running the server: %v", err)
-		}
-		close(httpsWait)
-	}()
+	httpsWait := make(chan bool)
+	httpsServer := startHttpsServer(httpsWait)
 
 	<-sigChannel
 
-	cancel()
+	go gracefulShutdown(httpsServer)
+	go gracefulShutdown(httpServer)
 
 	<-httpWait
 	<-httpsWait
 
 	logrus.Info("Servers have stopped - shutdown.")
+}
+
+func gracefulShutdown(server *http.Server) {
+	ctxShutDown, _ := context.WithTimeout(context.Background(), config.GracefulShutdownPeriod)
+	err := server.Shutdown(ctxShutDown)
+	if err != nil {
+		logrus.Errorf("error shutting down server (%s): %v", server.Addr, err)
+		err = server.Close()
+		if err != nil {
+			logrus.Errorf("error closing server (%s): %v", server.Addr, err)
+		}
+	}
 }

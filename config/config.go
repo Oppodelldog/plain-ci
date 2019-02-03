@@ -41,6 +41,9 @@ var WriteTimeout time.Duration
 //IdleTimeout used as http server config
 var IdleTimeout time.Duration
 
+//GracefulShutdownPeriod seconds to wait for api server to shutdown while shutting down the service
+var GracefulShutdownPeriod time.Duration
+
 func init() {
 
 	BuildDir = getEnv("SIMPLE_CI_BUILD_DIR", "/tmp/simple-ci")
@@ -56,6 +59,7 @@ func init() {
 	ReadTimeout = getDurationFromEnv("SIMPLE_CI_READ_TIMEOUT", time.Second*5)
 	WriteTimeout = getDurationFromEnv("SIMPLE_CI_WRITE_TIMEOUT", time.Second*5)
 	IdleTimeout = getDurationFromEnv("SIMPLE_CI_READ_TIMEOUT", time.Second*120)
+	GracefulShutdownPeriod = getDurationFromEnv("SIMPLE_CI_SHUTDOWN_TIMEOUT", time.Second*6)
 
 	IdleTimeout = getDurationFromEnv("SIMPLE_CI_READ_TIMEOUT", time.Second*120)
 

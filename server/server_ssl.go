@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"crypto/tls"
 	"fmt"
 	"github.com/Oppodelldog/simpleci/config"
@@ -10,7 +9,7 @@ import (
 	"path"
 )
 
-func startHttpsServer(ctx context.Context) error {
+func startHttpsServer(wait chan bool) *http.Server {
 
 	m := newRouter()
 
@@ -30,14 +29,13 @@ func startHttpsServer(ctx context.Context) error {
 	keyFile := path.Join(config.CertDir, config.KeyFile)
 
 	go func() {
-		<-ctx.Done()
-		err := srv.Close()
-		if err != nil {
-			logrus.Errorf("error closing https server: %v", err)
+		if err := srv.ListenAndServeTLS(certFile, keyFile); err != nil {
+			logrus.Errorf("error running the server: %v", err)
+			close(wait)
 		}
 	}()
 
-	return srv.ListenAndServeTLS(certFile, keyFile)
+	return srv
 }
 
 func getTlsConfig() *tls.Config {
