@@ -1,4 +1,4 @@
-# simple-ci
+![alt text](https://github.com/Oppodelldog/simple-ci/raw/master/webview/assets/images/logo.png)
 > just another continuous integration server
 
 So what are the minimalistic features of a ci server?
