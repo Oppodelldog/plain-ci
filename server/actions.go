@@ -9,10 +9,6 @@ import (
 )
 
 func abortBuild(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != "GET" {
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 
 	vars := mux.Vars(request)
 	if id, ok := vars["id"]; ok {
@@ -59,10 +55,7 @@ func getBuildQueue(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getAllBuilds(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != "GET" {
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+
 	builds := build.GetAllBuilds()
 	if len(builds) == 0 {
 		writer.WriteHeader(http.StatusNoContent)
@@ -85,10 +78,7 @@ func getAllBuilds(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getBuild(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != "GET" {
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+
 	vars := mux.Vars(request)
 	if buildId, ok := vars["buildId"]; ok {
 
@@ -119,10 +109,7 @@ func getBuild(writer http.ResponseWriter, request *http.Request) {
 }
 
 func getBuildLog(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != "GET" {
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+
 	vars := mux.Vars(request)
 	buildId, hasBuildId := vars["buildId"]
 	logId, hasLogId := vars["logId"]
