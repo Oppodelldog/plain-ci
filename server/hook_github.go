@@ -130,34 +130,34 @@ type GithubWebHook struct {
 		LabelsURL        string      `json:"labels_url"`
 		ReleasesURL      string      `json:"releases_url"`
 		DeploymentsURL   string      `json:"deployments_url"`
-		CreatedAt        int         `json:"created_at"`
-		UpdatedAt        time.Time   `json:"updated_at"`
-		PushedAt         int         `json:"pushed_at"`
-		GitURL           string      `json:"git_url"`
-		SSHURL           string      `json:"ssh_url"`
-		CloneURL         string      `json:"clone_url"`
-		SvnURL           string      `json:"svn_url"`
-		Homepage         interface{} `json:"homepage"`
-		Size             int         `json:"size"`
-		StargazersCount  int         `json:"stargazers_count"`
-		WatchersCount    int         `json:"watchers_count"`
-		Language         string      `json:"language"`
-		HasIssues        bool        `json:"has_issues"`
-		HasProjects      bool        `json:"has_projects"`
-		HasDownloads     bool        `json:"has_downloads"`
-		HasWiki          bool        `json:"has_wiki"`
-		HasPages         bool        `json:"has_pages"`
-		ForksCount       int         `json:"forks_count"`
-		MirrorURL        interface{} `json:"mirror_url"`
-		Archived         bool        `json:"archived"`
-		OpenIssuesCount  int         `json:"open_issues_count"`
-		License          interface{} `json:"license"`
-		Forks            int         `json:"forks"`
-		OpenIssues       int         `json:"open_issues"`
-		Watchers         int         `json:"watchers"`
-		DefaultBranch    string      `json:"default_branch"`
-		Stargazers       int         `json:"stargazers"`
-		MasterBranch     string      `json:"master_branch"`
+		//CreatedAt        time.Time         `json:"created_at"`
+		//UpdatedAt        time.Time   `json:"updated_at"`
+		//PushedAt         time.Time          `json:"pushed_at"`
+		GitURL          string      `json:"git_url"`
+		SSHURL          string      `json:"ssh_url"`
+		CloneURL        string      `json:"clone_url"`
+		SvnURL          string      `json:"svn_url"`
+		Homepage        interface{} `json:"homepage"`
+		Size            int         `json:"size"`
+		StargazersCount int         `json:"stargazers_count"`
+		WatchersCount   int         `json:"watchers_count"`
+		Language        string      `json:"language"`
+		HasIssues       bool        `json:"has_issues"`
+		HasProjects     bool        `json:"has_projects"`
+		HasDownloads    bool        `json:"has_downloads"`
+		HasWiki         bool        `json:"has_wiki"`
+		HasPages        bool        `json:"has_pages"`
+		ForksCount      int         `json:"forks_count"`
+		MirrorURL       interface{} `json:"mirror_url"`
+		Archived        bool        `json:"archived"`
+		OpenIssuesCount int         `json:"open_issues_count"`
+		License         interface{} `json:"license"`
+		Forks           int         `json:"forks"`
+		OpenIssues      int         `json:"open_issues"`
+		Watchers        int         `json:"watchers"`
+		DefaultBranch   string      `json:"default_branch"`
+		Stargazers      int         `json:"stargazers"`
+		MasterBranch    string      `json:"master_branch"`
 	} `json:"repository"`
 	Pusher struct {
 		Name  string `json:"name"`
