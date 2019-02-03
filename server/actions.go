@@ -4,21 +4,19 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"github.com/Oppodelldog/simpleci/build"
-	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func abortBuild(writer http.ResponseWriter, request *http.Request) {
 
-	vars := mux.Vars(request)
-	id, hasId := vars["id"]
-	if !hasId {
-		writer.WriteHeader(http.StatusBadRequest)
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("id").Validate() {
+		writeBadRequest(writer, requestParms)
 		return
 	}
 
-	err := build.AbortBuild(id)
+	err := build.AbortBuild(requestParms.GetString("id"))
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		return
@@ -41,30 +39,25 @@ func getAllBuilds(writer http.ResponseWriter, request *http.Request) {
 
 func getBuild(writer http.ResponseWriter, request *http.Request) {
 
-	vars := mux.Vars(request)
-	buildId, hasBuildId := vars["buildId"]
-	if !hasBuildId {
-		writer.WriteHeader(http.StatusBadRequest)
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("buildId").Validate() {
+		writeBadRequest(writer, requestParms)
 		return
 	}
 
-	builds := build.GetBuild(buildId)
+	builds := build.GetBuild(requestParms.GetString("buildId"))
 	writeJson(writer, builds)
-
 }
 
 func getBuildLog(writer http.ResponseWriter, request *http.Request) {
 
-	vars := mux.Vars(request)
-	buildId, hasBuildId := vars["buildId"]
-	logId, hasLogId := vars["logId"]
-
-	if !hasBuildId || !hasLogId {
-		writer.WriteHeader(http.StatusBadRequest)
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("buildId", "logId").Integer("logId").Validate() {
+		writeBadRequest(writer, requestParms)
 		return
 	}
 
-	buildLog := build.GetBuildLog(buildId, logId)
+	buildLog := build.GetBuildLog(requestParms.GetString("buildId"), requestParms.GetInt("logId"))
 	writeJson(writer, buildLog)
 }
 
@@ -87,4 +80,9 @@ func writeJson(writer http.ResponseWriter, data interface{}) {
 	if err != nil {
 		logrus.Errorf("error writing json to client: %v", err)
 	}
+}
+
+func writeBadRequest(writer http.ResponseWriter, requestParms *RequestParams) {
+	writer.WriteHeader(http.StatusBadRequest)
+	writeJson(writer, requestParms.GetValidationErrors())
 }

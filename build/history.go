@@ -49,8 +49,8 @@ func GetBuild(repoDir string) []int {
 	return logNumbers
 }
 
-func GetBuildLog(repoDir string, logId string) string {
-	filePath := path.Join(getBuildLogPath(repoDir), fmt.Sprintf("%s.txt", logId))
+func GetBuildLog(repoDir string, logId int) string {
+	filePath := path.Join(getBuildLogPath(repoDir), fmt.Sprintf("%v.txt", logId))
 
 	b, err := ioutil.ReadFile(filePath)
 	if err != nil {
