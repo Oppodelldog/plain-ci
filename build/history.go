@@ -49,10 +49,14 @@ func GetBuild(repoDir string) []int {
 	return logNumbers
 }
 
-func GetBuildLog(repoDir string, logId string) (string, error) {
+func GetBuildLog(repoDir string, logId string) string {
 	filePath := path.Join(getBuildLogPath(repoDir), fmt.Sprintf("%s.txt", logId))
 
 	b, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		logrus.Errorf("Error reading build log %s %s", repoDir, logId)
+		return ""
+	}
 
-	return string(b), err
+	return string(b)
 }

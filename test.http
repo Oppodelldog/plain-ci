@@ -26,7 +26,7 @@ Accept: application/json
 ###
 # abort running build
 
-GET https://localhost:10443/queue/abort/a44b531011324be3867c6c6de47e7685
+POST https://localhost:10443/queue/abort/240dae94991740328df0e58555f04e45
 Accept: application/json
 
 ###
