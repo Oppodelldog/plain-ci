@@ -1,0 +1,126 @@
+{{define "head"}}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>simple-ci</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style type="text/css">
+            :root {
+                --link-color: #dc20d0;
+                --link-color-active: #ff20f3;
+                --link-color-visited: #9f1c95;
+
+                --primary: #acff9a;
+                --primary-background: #006b81;
+                --red: #ff0000;
+                --red-background: #641e21;
+
+                --content-margin-left: 12px;
+                --font-size-12: 12pt;
+                --font-family: Arial, Helvetica, sans-serif;
+            }
+
+            body {
+                font-family: var(--font-family);
+                font-size: var(--font-size-12);
+            }
+
+            body, ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            a {
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            a:link {
+                color: var(--link-color);
+            }
+
+            a:hover, a:active {
+                color: var(--link-color-active);
+            }
+
+            a:visited {
+                color: var(--link-color-visited);
+            }
+
+            .content, h1, h2, h3, h4, h5, h6, ul {
+                margin-left: var(--content-margin-left);
+            }
+
+            ul {
+                padding: 0;
+                list-style-type: none;
+            }
+
+            .success-notification, .error-notification {
+                margin: 0 var(--content-margin-left) 0 var(--content-margin-left);
+                display: block;
+                padding: 6px;
+                font-weight: bold;
+                border: 1px solid grey;
+            }
+
+            .success-notification {
+                background-color: var(--primary-background);
+                color: var(--primary);
+            }
+
+            .error-notification {
+                background-color: var(--red-background);
+                color: var(--red);
+            }
+
+            .logo {
+                padding-top: 4px;
+                width: 100%;
+                display: block;
+                height: 26px;
+                color: var(--primary);
+                background-color: var(--primary-background);
+                font-weight: bold;
+            }
+
+            .logo .nolink,
+            .logo .nolink:link,
+            .logo .nolink:visited,
+            .logo .nolink:active,
+            .logo .nolink:hover {
+                color: var(--primary);
+                background-color: var(--primary-background);
+            }
+
+            .logo a,
+            .logo a:link,
+            .logo a:visited,
+            .logo a:active,
+            .logo a:hover {
+                color: var(--link-color);
+                background: none;
+            }
+
+            .logo ul {
+                display: inline-block;
+            }
+
+            .logo li {
+                float: left;
+                margin-right: 10px;
+            }
+
+            .build {
+            }
+
+            .build span:nth-child(1) {
+                font-weight: bold;
+                width: 160px;
+                height: 24px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+{{end}}}

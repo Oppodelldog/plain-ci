@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="">
+{{template "head"}}
+<body>
+{{template "logo"}}
+
+<h1>Queue</h1>
+{{range .Builds}}
+    <ul class="build content">
+
+        <li><span>ID</span> <span>{{ .ID }}</span></li>
+        <li><span>No</span>
+            <span>
+                {{ .No }}
+                [<a href="/webview/build/{{.RepoPath}}/{{ .No }}">
+                    Log
+                </a>]
+                {{ if not .Done}}
+                    -
+                    [<a href="/webview/queue/abort/{{.ID}}">
+                    Abort
+                    </a>]
+                {{end}}
+            </span></li>
+        <li><span>RepoURL</span> <span>{{ .RepoURL }}</span></li>
+        <li><span>Commit-Hash</span> <span>{{ .CommitHash }}</span></li>
+        <li><span>Originator</span> <span>{{ .Originator }}</span></li>
+        <li><span>StartedAt</span> <span>{{ .StartedAt }}</span></li>
+        <li><span>FinishedAt</span> <span>{{ .FinishedAt }}</span></li>
+        <li><span>Done</span> <span>{{ .Done }}</span></li>
+        <li><span>Error</span> <span>{{ .Error }}</span></li>
+
+    </ul>
+{{end}}
+{{if not .Builds }} no builds in queue {{end}}
+
+</body>
+</html>

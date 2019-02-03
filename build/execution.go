@@ -54,7 +54,7 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 	err = ciCmd.Start()
 	if err != nil {
 		logWrite("error while starting: %v\n", err)
-		logWrite("BUILD FAILED")
+		logWrite("BUILD FAILED", nil)
 		return err
 	}
 
@@ -77,7 +77,12 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 
 func createWriteLogFunc(file *os.File) func(format string, args ...interface{}) {
 	return func(format string, args ...interface{}) {
-		_, err := fmt.Fprintf(file, format, args)
+		var err error
+		if len(args) > 0 {
+			_, err = fmt.Fprintf(file, format, args)
+		} else {
+			_, err = fmt.Fprint(file, format)
+		}
 		if err != nil {
 			logrus.Errorf("could not write to log file '%s': %v", file.Name(), err)
 		}

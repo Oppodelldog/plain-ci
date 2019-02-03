@@ -17,10 +17,18 @@ func New(repoURL string, commit string, originator string, customPreBuildNotify 
 	buildID, err := newUUID()
 	if err != nil {
 		logrus.Errorf("error generating build ID: %v", err)
+		return
+	}
+	buildNo, err := getNextBuildNo(repoURL)
+	if err != nil {
+		logrus.Errorf("Error starting build for %s on commit %s", repoURL, commit)
+		return
 	}
 
 	newBuild := &Build{
 		ID:         buildID,
+		RepoPath:   normalizeUrl(repoURL),
+		No:         buildNo,
 		Originator: originator,
 		RepoURL:    repoURL,
 		CommitHash: commit,
@@ -35,30 +43,26 @@ func New(repoURL string, commit string, originator string, customPreBuildNotify 
 
 	triggerNotifyApi(ctx, preBuildNotifyName, customPreBuildNotify, *newBuild, getPreNotificationScriptsDir())
 
-	err = startBuild(ctx, repoURL, commit)
+	err = startBuild(ctx, buildNo, repoURL, commit)
 	if err != nil {
 		logrus.Errorf("error during Build: %v", err)
 		newBuild.Error = err.Error()
 	}
 	newBuild.FinishedAt = time.Now()
+	newBuild.Done = true
 
 	triggerNotifyApi(ctx, postBuildNotifyName, customPostBuildNotify, *newBuild, getPostNotificationScriptsDir())
 }
 
-func startBuild(ctx context.Context, repoURL, buildRev string) error {
-	buildNo, err := getNextBuildNo(repoURL)
-	if err != nil {
-		logrus.Errorf("Error starting build for %s on commit %s", repoURL, buildRev)
-		return err
-	}
+func startBuild(ctx context.Context, buildNo int, repoURL, commit string) error {
 
-	logrus.Infof("Starting build %v for %s on commit %s", buildNo, repoURL, buildRev)
-	err = prepareGitRepository(ctx, repoURL, buildRev)
+	logrus.Infof("Starting build %v for %s on commit %s", buildNo, repoURL, commit)
+	err := prepareGitRepository(ctx, repoURL, commit)
 	if err != nil {
 		return err
 	}
 
-	err = executeBuild(ctx, repoURL, buildRev, buildNo)
+	err = executeBuild(ctx, repoURL, commit, buildNo)
 	if err != nil {
 		return err
 	}

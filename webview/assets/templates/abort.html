@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="">
+{{template "head"}}
+<body>
+{{template "logo"}}
+<h1>Abort</h1>
+{{ if not .Error }}
+    <span class="success-notification">
+    Build aborted
+    </span>
+{{else}}
+    <span class="error-notification">
+    Error aborting: {{.Error}}
+    </span>
+{{end}}
+</body>
+</html>

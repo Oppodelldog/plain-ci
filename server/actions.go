@@ -1,9 +1,8 @@
 package server
 
 import (
-	"encoding/binary"
-	"encoding/json"
 	"github.com/Oppodelldog/simpleci/build"
+	"github.com/Oppodelldog/simpleci/webview"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -12,7 +11,7 @@ func abortBuild(writer http.ResponseWriter, request *http.Request) {
 
 	requestParms := newRequestParams(request)
 	if !requestParms.Require("id").Validate() {
-		writeBadRequest(writer, requestParms)
+		writeBadRequestJson(writer, requestParms)
 		return
 	}
 
@@ -41,7 +40,7 @@ func getBuild(writer http.ResponseWriter, request *http.Request) {
 
 	requestParms := newRequestParams(request)
 	if !requestParms.Require("buildId").Validate() {
-		writeBadRequest(writer, requestParms)
+		writeBadRequestJson(writer, requestParms)
 		return
 	}
 
@@ -53,7 +52,7 @@ func getBuildLog(writer http.ResponseWriter, request *http.Request) {
 
 	requestParms := newRequestParams(request)
 	if !requestParms.Require("buildId", "logId").Integer("logId").Validate() {
-		writeBadRequest(writer, requestParms)
+		writeBadRequestJson(writer, requestParms)
 		return
 	}
 
@@ -61,28 +60,66 @@ func getBuildLog(writer http.ResponseWriter, request *http.Request) {
 	writeJson(writer, buildLog)
 }
 
-func writeJson(writer http.ResponseWriter, data interface{}) {
-	if binary.Size(data) == 0 {
-		writer.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	jsonBytes, err := json.Marshal(data)
-	if err != nil {
-		logrus.Errorf("error while encoding to json: %v", err)
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	writer.Header().Set("Content-Type", "application/json")
+func webViewIndex(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
-	_, err = writer.Write(jsonBytes)
+	err := webview.RenderIndexPage(writer)
 	if err != nil {
-		logrus.Errorf("error writing json to client: %v", err)
+		logrus.Errorf("error rendering about page: %v", err)
 	}
 }
 
-func writeBadRequest(writer http.ResponseWriter, requestParms *RequestParams) {
-	writer.WriteHeader(http.StatusBadRequest)
-	writeJson(writer, requestParms.GetValidationErrors())
+func webViewQueue(writer http.ResponseWriter, request *http.Request) {
+	writer.WriteHeader(http.StatusOK)
+	err := webview.RenderQueuePage(writer)
+	if err != nil {
+		logrus.Errorf("error rendering queue page: %v", err)
+	}
+}
+
+func webViewLog(writer http.ResponseWriter, request *http.Request) {
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("logId", "buildId").Integer("logId").Validate() {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
+	err := webview.RenderLogPage(writer, requestParms.GetString("buildId"), requestParms.GetInt("logId"))
+	if err != nil {
+		logrus.Errorf("error rendering log page: %v", err)
+	}
+}
+
+func webviewAbort(writer http.ResponseWriter, request *http.Request) {
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("id").Validate() {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+	err := webview.RenderAbortPage(writer, requestParms.GetString("id"))
+	if err != nil {
+		logrus.Errorf("error rendering abort page: %v", err)
+	}
+}
+
+func webViewBuilds(writer http.ResponseWriter, request *http.Request) {
+	writer.WriteHeader(http.StatusOK)
+	err := webview.RenderBuildsPage(writer)
+	if err != nil {
+		logrus.Errorf("error rendering builds page: %v", err)
+	}
+}
+
+func webViewBuild(writer http.ResponseWriter, request *http.Request) {
+	requestParms := newRequestParams(request)
+	if !requestParms.Require("buildId").Validate() {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
+	err := webview.RenderBuildPage(writer, requestParms.GetString("buildId"))
+	if err != nil {
+		logrus.Errorf("error rendering build page: %v", err)
+	}
 }

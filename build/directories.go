@@ -16,14 +16,20 @@ func getBuildLogPath(repoUrl string) string {
 }
 
 func getPath(repoURL string) string {
+	tmpPath := normalizeUrl(repoURL)
+
+	tmpPath = filepath.Join(config.BuildDir, tmpPath)
+
+	return tmpPath
+}
+
+func normalizeUrl(repoURL string) string {
 	tmpPath := repoURL
 	tmpPath = strings.Replace(tmpPath, "/", "_", -1)
 	tmpPath = strings.Replace(tmpPath, ":", "_", -1)
 	tmpPath = strings.Replace(tmpPath, "\\", "_", -1)
 	tmpPath = strings.Replace(tmpPath, "?", "_", -1)
 	tmpPath = strings.Replace(tmpPath, " ", "_", -1)
-
-	tmpPath = filepath.Join(config.BuildDir, tmpPath)
 
 	return tmpPath
 }
