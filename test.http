@@ -5,6 +5,11 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
+GET https://localhost:10443/healthcheck
+
+###
+# trigger build by simple hook
+
 POST https://localhost:10443/hook/simple
 Content-Type: application/json
 
@@ -19,6 +24,7 @@ GET https://localhost:10443/queue
 Accept: application/json
 
 ###
+# abort running build
 
 GET https://localhost:10443/queue/abort/a44b531011324be3867c6c6de47e7685
 Accept: application/json
