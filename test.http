@@ -5,7 +5,7 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-POST http://localhost:12345/hook/simple
+POST https://localhost:10443/hook/simple
 Content-Type: application/json
 
 {
@@ -15,30 +15,30 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:12345/queue
+GET https://localhost:10443/queue
 Accept: application/json
 
 ###
 
-GET http://localhost:12345/queue/abort/a44b531011324be3867c6c6de47e7685
+GET https://localhost:10443/queue/abort/a44b531011324be3867c6c6de47e7685
 Accept: application/json
 
 ###
 # list all build numbers
 
-GET http://localhost:12345/build
+GET https://localhost:10443/build
 Accept: application/json
 
 ###
 # list all build numbers for a repository
 
-GET http://localhost:12345/build/https___github.com_Oppodelldog_simple-ci.git
+GET https://localhost:10443/build/https___github.com_Oppodelldog_simple-ci.git
 Accept: application/json
 
 ###
 # get the log for one build
 
-GET http://localhost:12345/build/https___github.com_Oppodelldog_simple-ci.git/3
+GET https://localhost:10443/build/https___github.com_Oppodelldog_simple-ci.git/1
 Accept: application/json
 
 ###

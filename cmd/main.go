@@ -1,12 +1,7 @@
 package main
 
-import (
-	"github.com/Oppodelldog/simpleci/server"
-	"github.com/sirupsen/logrus"
-)
+import "github.com/Oppodelldog/simpleci/server"
 
 func main() {
-	if err := server.Start(); err != nil {
-		logrus.Errorf("error running the server: %v", err)
-	}
+	server.Start()
 }
