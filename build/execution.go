@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -13,6 +12,7 @@ import (
 
 func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) error {
 
+	timeStart := time.Now()
 	logrus.Infof("Starting build %v", buildNo)
 
 	repoDir := getRepoPath(repoURL)
@@ -36,14 +36,16 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 		}
 	}()
 
-	_, err = fmt.Fprintf(f, "Build: %v\n", buildNo)
-	_, err = fmt.Fprintf(f, "Date: %v\n", time.Now())
-	_, err = fmt.Fprintf(f, "Repository: %v\n", repoURL)
-	_, err = fmt.Fprintf(f, "Commit-Hash: %v\n", commitHash)
+	logWrite := createWriteLogFunc(f)
+
+	logWrite("Build: %v\n", buildNo)
+	logWrite("Date: %v\n", time.Now())
+	logWrite("Repository: %v\n", repoURL)
+	logWrite("Commit-Hash: %v\n", commitHash)
 	if err != nil {
 		panic(err)
 	}
-	writeSeperator(f)
+	logWrite("------------------------------------------------------------------------------------------------------------------------------")
 
 	ciCmd := exec.CommandContext(ctx, ciScript)
 	ciCmd.Stdout = f
@@ -51,35 +53,39 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 
 	err = ciCmd.Start()
 	if err != nil {
-		writeBuildFinishError(f, err)
+		logWrite("error while starting: %v\n", err)
+		logWrite("BUILD FAILED")
 		return err
 	}
 
 	logrus.Infof("Waiting for build %v to finish", buildNo)
 	err = ciCmd.Wait()
+
+	logWrite("------------------------------------------------------------------------------------------------------------------------------")
+	logWrite("duration: %v\n", time.Since(timeStart))
+
 	if err != nil {
-		writeBuildFinishError(f, err)
+		logWrite("error during build: %v\n", err)
+		logWrite("BUILD FAILED")
 		return err
 	} else {
-		writeBuildFinishSuccess(f)
+		logWrite("BUILD SUCCESS")
 	}
 
 	return nil
 }
 
-func writeBuildFinishError(f io.Writer, err error) {
-	writeSeperator(f)
-	_, _ = fmt.Fprintf(f, "error: %v\n", err)
-	_, _ = fmt.Fprint(f, "BUILD FAILED")
-}
-
-func writeBuildFinishSuccess(f io.Writer) {
-	writeSeperator(f)
-	_, _ = fmt.Fprint(f, "BUILD SUCCESS")
-}
-
-func writeSeperator(f io.Writer) {
-	_, _ = fmt.Fprint(f, "------------------------------------------------------------------------------------------------------------------------------\n")
+func createWriteLogFunc(file *os.File) func(format string, args ...interface{}) {
+	return func(format string, args ...interface{}) {
+		_, err := fmt.Fprintf(file, format, args)
+		if err != nil {
+			logrus.Errorf("could not write to log file '%s': %v", file.Name(), err)
+		}
+		_, err = fmt.Fprintln(file)
+		if err != nil {
+			logrus.Errorf("could not write line break to log file '%s': %v", file.Name(), err)
+		}
+	}
 }
 
 func ensureDir(path string) error {
