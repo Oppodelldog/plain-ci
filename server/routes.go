@@ -1,10 +1,9 @@
 package server
 
 import (
-	"github.com/Oppodelldog/simpleci/webview"
+	"github.com/Oppodelldog/simpleci/webview/assets"
 	"github.com/gorilla/mux"
 	"net/http"
-	"path"
 )
 
 func newRouter() *mux.Router {
@@ -28,10 +27,7 @@ func newRouter() *mux.Router {
 	m.HandleFunc("/webview/build/{buildId}", webViewBuild).Methods(http.MethodGet)
 	m.HandleFunc("/webview/build/{buildId}/{logId}", webViewLog).Methods(http.MethodGet)
 
-	imagesPrefix := "/webview/images/"
-	imagesHandler := http.FileServer(http.Dir(path.Join(".", webview.ImagesDir)))
-	imagesHandler = http.StripPrefix(imagesPrefix, imagesHandler)
-	m.PathPrefix(imagesPrefix).Handler(imagesHandler).Methods(http.MethodGet)
+	m.PathPrefix("/webview/images/").Handler(http.StripPrefix("/webview", http.FileServer(assets.Images.FS()))).Methods(http.MethodGet)
 
 	return m
 }

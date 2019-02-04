@@ -2,35 +2,32 @@ package webview
 
 import (
 	"github.com/Oppodelldog/simpleci/build"
+	"github.com/Oppodelldog/simpleci/webview/assets"
 	"html/template"
 	"io"
 	"path"
+	"path/filepath"
 )
 
-const templatesDir = "webview/assets/templates"
-const ImagesDir = "webview/assets/images"
-
 func RenderIndexPage(w io.Writer) error {
-	templateFile := path.Join(templatesDir, "about.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+
+	t, err := newPageTemplate("about.html")
 	if err != nil {
 		return err
 	}
-	return tpl.Execute(w,
+
+	return t.Execute(w,
 		struct {
 		}{})
 }
 
 func RenderQueuePage(w io.Writer) error {
 
-	templateFile := path.Join(templatesDir, "queue.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+	t, err := newPageTemplate("queue.html")
 	if err != nil {
 		return err
 	}
-	return tpl.Execute(w,
+	return t.Execute(w,
 		struct {
 			Builds []build.Build
 		}{
@@ -39,14 +36,12 @@ func RenderQueuePage(w io.Writer) error {
 }
 
 func RenderLogPage(w io.Writer, buildId string, logId int) error {
-	templateFile := path.Join(templatesDir, "log.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+	t, err := newPageTemplate("log.html")
 	if err != nil {
 		return err
 	}
 
-	return tpl.Execute(w,
+	return t.Execute(w,
 		struct {
 			BuildID string
 			LogID   int
@@ -59,14 +54,12 @@ func RenderLogPage(w io.Writer, buildId string, logId int) error {
 }
 
 func RenderAbortPage(w io.Writer, id string) error {
-	templateFile := path.Join(templatesDir, "abort.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+	t, err := newPageTemplate("abort.html")
 	if err != nil {
 		return err
 	}
 
-	return tpl.Execute(w,
+	return t.Execute(w,
 		struct {
 			Error error
 		}{
@@ -75,14 +68,12 @@ func RenderAbortPage(w io.Writer, id string) error {
 }
 
 func RenderBuildsPage(w io.Writer) error {
-	templateFile := path.Join(templatesDir, "builds.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+	t, err := newPageTemplate("builds.html")
 	if err != nil {
 		return err
 	}
 
-	return tpl.Execute(w,
+	return t.Execute(w,
 		struct {
 			Repositories []build.Repository
 		}{
@@ -91,14 +82,12 @@ func RenderBuildsPage(w io.Writer) error {
 }
 
 func RenderBuildPage(w io.Writer, buildId string) error {
-	templateFile := path.Join(templatesDir, "build.html")
-	templates := append([]string{templateFile}, getPartials()...)
-	tpl, err := template.ParseFiles(templates...)
+	t, err := newPageTemplate("build.html")
 	if err != nil {
 		return err
 	}
 
-	return tpl.Execute(w,
+	return t.Execute(w,
 		struct {
 			Builds  []int
 			BuildID string
@@ -107,9 +96,40 @@ func RenderBuildPage(w io.Writer, buildId string) error {
 			Builds:  build.GetBuild(buildId),
 		})
 }
+
 func getPartials() []string {
-	partialsPath := path.Join(templatesDir, "partials")
+	partialsPath := path.Join("/templates", "partials")
 	return []string{
 		path.Join(partialsPath, "logo.html"),
 		path.Join(partialsPath, "head.html")}
+}
+
+func newPageTemplate(pageFileName string) (*template.Template, error) {
+	pageFilePath := path.Join("/templates", pageFileName)
+	name := filepath.Base(pageFilePath)
+
+	t := template.New(name)
+
+	b, err := assets.Templates.ReadFile(pageFilePath)
+	if err != nil {
+		return nil, err
+	}
+	_, err = t.Parse(string(b))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, partial := range getPartials() {
+		b, err := assets.Templates.ReadFile(partial)
+		if err != nil {
+			return nil, err
+		}
+		tmpl := t.New(partial)
+		_, err = tmpl.Parse(string(b))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return t, nil
 }

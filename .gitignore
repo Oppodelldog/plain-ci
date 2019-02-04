@@ -1,1 +1,5 @@
 .idea/*
+
+# exclude static assets
+webview/assets/images.go
+webview/assets/templates.go
