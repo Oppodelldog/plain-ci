@@ -1,8 +1,8 @@
 BUILD_ARTIFACTS = ".build-artifiacts"
 
 generate-assets: ## generates static assets
-	statics -i=webview/assets/templates -o=webview/assets/templates.go -pkg=assets -group=Templates -ignore=\.gitignore
-	statics -i=webview/assets/images    -o=webview/assets/images.go -pkg=assets -group=Images -ignore=\.gitignore
+	statics -i=webview/assets/templates -o=webview/assets/templates.go -pkg=assets -group=Templates -ignore=\.gitignore -prefix=webview/assets
+	statics -i=webview/assets/images    -o=webview/assets/images.go -pkg=assets -group=Images -ignore=\.gitignore -prefix=webview/assets
 	
 build: generate-assets ##
 	go build -o $(BUILD_ARTIFACTS)/simpleci cmd/main.go

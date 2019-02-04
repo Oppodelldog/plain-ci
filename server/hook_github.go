@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Oppodelldog/simpleci/build"
-	"github.com/Oppodelldog/simpleci/config"
+	"github.com/Oppodelldog/plainci/build"
+	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -263,7 +263,7 @@ func buildPostBuildNotificationRequest(state, description string, owner, repoNam
 		State:       state,
 		TargetURL:   "",
 		Description: description,
-		Context:     "continuous-integration/simple-ci",
+		Context:     "continuous-integration/plain-ci",
 	}
 
 	jsonBytes, err := json.Marshal(notification)

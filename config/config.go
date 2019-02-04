@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// BuildDir defines a folder in which simple-ci will perform its build actions
+// BuildDir defines a folder in which plain-ci will perform its build actions
 var BuildDir string
 
 // ServerPort for API like hooks or REST access
@@ -46,12 +46,12 @@ var GracefulShutdownPeriod time.Duration
 
 func init() {
 
-	BuildDir = getEnv("SIMPLE_CI_BUILD_DIR", "/tmp/simple-ci")
+	BuildDir = getEnv("SIMPLE_CI_BUILD_DIR", "/tmp/plain-ci")
 	ServerPort = getEnv("SIMPLE_CI_SERVER_PORT", "10080")
 	ServerPortTLS = getEnv("SIMPLE_CI_SERVER_PORT_TLS", "10443")
 	GithubToken = getEnv("SIMPLE_CI_GITHUB_TOKEN", "")
 
-	Domain = getEnv("SIMPLE_CI_DOMAIN", "www.simple-ci.test")
+	Domain = getEnv("SIMPLE_CI_DOMAIN", "www.plain-ci.test")
 	CertDir = getEnv("SIMPLE_CI_CERT_DIR", ".cert")
 	CertFile = getEnv("SIMPLE_CI_CERT_FILE", "sample.crt")
 	KeyFile = getEnv("SIMPLE_CI_KEY_FILE", "sample.key")

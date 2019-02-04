@@ -1,6 +1,3 @@
-//go:generate statics -i=images -o=images.go -pkg=assets -group=Images -ignore=.gitignore
-//go:generate statics -i=templates -o=templates.go -pkg=assets -group=Templates -ignore=.gitignore
-
 package assets
 
 import (
@@ -17,7 +14,7 @@ func init() {
 
 	config := &static.Config{
 		UseStaticFiles: true,
-		FallbackToDisk: true,
+		FallbackToDisk: false,
 		AbsPkgPath:     assetsPath,
 	}
 

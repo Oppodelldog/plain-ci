@@ -1,8 +1,8 @@
 package webview
 
 import (
-	"github.com/Oppodelldog/simpleci/build"
-	"github.com/Oppodelldog/simpleci/webview/assets"
+	"github.com/Oppodelldog/plainci/build"
+	"github.com/Oppodelldog/plainci/webview/assets"
 	"html/template"
 	"io"
 	"path"

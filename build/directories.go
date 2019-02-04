@@ -1,7 +1,7 @@
 package build
 
 import (
-	"github.com/Oppodelldog/simpleci/config"
+	"github.com/Oppodelldog/plainci/config"
 	"os"
 	"path/filepath"
 	"strings"

@@ -14,7 +14,7 @@ POST https://localhost:10443/hook/simple
 Content-Type: application/json
 
 {
-  "URL": "https://github.com/Oppodelldog/simple-ci.git",
+  "URL": "https://github.com/Oppodelldog/plain-ci.git",
   "REV": "ba99de688acc32fb4c0778b9b5b74e8ab9a881eb"
 }
 
@@ -38,13 +38,13 @@ Accept: application/json
 ###
 # list all build numbers for a repository
 
-GET https://localhost:10443/build/https___github.com_Oppodelldog_simple-ci.git
+GET https://localhost:10443/build/https___github.com_Oppodelldog_plain-ci.git
 Accept: application/json
 
 ###
 # get the log for one build
 
-GET https://localhost:10443/build/https___github.com_Oppodelldog_simple-ci.git/1
+GET https://localhost:10443/build/https___github.com_Oppodelldog_plain-ci.git/1
 Accept: application/json
 
 ###

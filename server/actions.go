@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/Oppodelldog/simpleci/build"
-	"github.com/Oppodelldog/simpleci/webview"
+	"github.com/Oppodelldog/plainci/build"
+	"github.com/Oppodelldog/plainci/webview"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )

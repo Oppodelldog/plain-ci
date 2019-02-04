@@ -3,7 +3,7 @@ package server
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/Oppodelldog/simpleci/config"
+	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"path"

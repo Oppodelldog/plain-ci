@@ -3,7 +3,7 @@ package build
 import (
 	"context"
 	"fmt"
-	"github.com/Oppodelldog/simpleci/config"
+	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"time"

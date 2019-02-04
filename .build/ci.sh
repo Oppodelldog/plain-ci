@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-echo "simple-ci never fails"
+echo "plain-ci never fails"
 
 exit 0

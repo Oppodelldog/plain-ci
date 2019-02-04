@@ -3,7 +3,7 @@
 Simple ci is so simple, it has no built in plugins.
 But it provides support for custom actions via its notification api.
 
-Whenever a build reached a noteworthy step, simple-ci will call
+Whenever a build reached a noteworthy step, plain-ci will call
 external programs or scripts that gives you all freedom you need.
 
 ## pre build

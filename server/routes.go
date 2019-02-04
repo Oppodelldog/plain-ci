@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/Oppodelldog/simpleci/webview/assets"
+	"github.com/Oppodelldog/plainci/webview/assets"
 	"github.com/gorilla/mux"
 	"net/http"
 )

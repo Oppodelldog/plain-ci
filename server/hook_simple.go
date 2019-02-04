@@ -2,7 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/Oppodelldog/simpleci/build"
+	"github.com/Oppodelldog/plainci/build"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )

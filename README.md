@@ -1,4 +1,4 @@
-![alt text](https://github.com/Oppodelldog/simple-ci/raw/master/webview/assets/images/logo.png)
+![alt text](https://github.com/Oppodelldog/plain-ci/raw/master/webview/assets/images/logo.png)
 > just another continuous integration server
 
 So what are the minimalistic features of a ci server?
@@ -46,9 +46,9 @@ Github integration allow to automatically start a build for each push to github.
 When the build job finishes it sends a commit status notification to github indicating
 the status of the build.  
 
-create a token for simple-ci
+create a token for plain-ci
 * https://github.com/settings/tokens
-when starting simple-ci, set the token in **env var** ```SIMPLE_CI_GITHUB_TOKEN```
+when starting plain-ci, set the token in **env var** ```SIMPLE_CI_GITHUB_TOKEN```
 
 create a Webhook for your github project
 + http://yourIpAddress:12345/hook/github
