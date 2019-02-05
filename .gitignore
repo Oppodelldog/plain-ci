@@ -1,4 +1,5 @@
 .idea/*
+.build-artifacts/*
 
 # exclude static assets
 webview/assets/images.go
