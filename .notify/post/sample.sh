@@ -1,9 +1,9 @@
 #!/bin/bash
-buildId=${PLAIN_CIBUILD_ID}
-repoURL=${PLAIN_CIREPO_URL}
-commitHash=${PLAIN_CICOMMIT_HASH}
-originator=${PLAIN_CIORIGINATOR}
-error=${PLAIN_CIERROR}
+buildId=${PLAIN_CI_BUILD_ID}
+repoURL=${PLAIN_CI_REPO_URL}
+commitHash=${PLAIN_CI_COMMIT_HASH}
+originator=${PLAIN_CI_ORIGINATOR}
+error=${PLAIN_CI_ERROR}
 
 echo "sample post-build notification"
 echo "------------------------------------------"

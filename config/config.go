@@ -46,24 +46,24 @@ var GracefulShutdownPeriod time.Duration
 
 func init() {
 
-	BuildDir = getEnv("PLAIN_CIBUILD_DIR", "/tmp/plain-ci")
-	ServerPort = getEnv("PLAIN_CISERVER_PORT", "10080")
-	ServerPortTLS = getEnv("PLAIN_CISERVER_PORT_TLS", "10443")
-	GithubToken = getEnv("PLAIN_CIGITHUB_TOKEN", "")
+	BuildDir = getEnv("PLAIN_CI_BUILD_DIR", "/tmp/plain-ci")
+	ServerPort = getEnv("PLAIN_CI_SERVER_PORT", "10080")
+	ServerPortTLS = getEnv("PLAIN_CI_SERVER_PORT_TLS", "10443")
+	GithubToken = getEnv("PLAIN_CI_GITHUB_TOKEN", "")
 
-	Domain = getEnv("PLAIN_CIDOMAIN", "www.plain-ci.test")
-	CertDir = getEnv("PLAIN_CICERT_DIR", ".cert")
-	CertFile = getEnv("PLAIN_CICERT_FILE", "sample.crt")
-	KeyFile = getEnv("PLAIN_CIKEY_FILE", "sample.key")
+	Domain = getEnv("PLAIN_CI_DOMAIN", "www.plain-ci.test")
+	CertDir = getEnv("PLAIN_CI_CERT_DIR", ".cert")
+	CertFile = getEnv("PLAIN_CI_CERT_FILE", "sample.crt")
+	KeyFile = getEnv("PLAIN_CI_KEY_FILE", "sample.key")
 
-	ReadTimeout = getDurationFromEnv("PLAIN_CIREAD_TIMEOUT", time.Second*5)
-	WriteTimeout = getDurationFromEnv("PLAIN_CIWRITE_TIMEOUT", time.Second*5)
-	IdleTimeout = getDurationFromEnv("PLAIN_CIREAD_TIMEOUT", time.Second*120)
-	GracefulShutdownPeriod = getDurationFromEnv("PLAIN_CISHUTDOWN_TIMEOUT", time.Second*6)
+	ReadTimeout = getDurationFromEnv("PLAIN_CI_READ_TIMEOUT", time.Second*5)
+	WriteTimeout = getDurationFromEnv("PLAIN_CI_WRITE_TIMEOUT", time.Second*5)
+	IdleTimeout = getDurationFromEnv("PLAIN_CI_READ_TIMEOUT", time.Second*120)
+	GracefulShutdownPeriod = getDurationFromEnv("PLAIN_CI_SHUTDOWN_TIMEOUT", time.Second*6)
 
-	IdleTimeout = getDurationFromEnv("PLAIN_CIREAD_TIMEOUT", time.Second*120)
+	IdleTimeout = getDurationFromEnv("PLAIN_CI_READ_TIMEOUT", time.Second*120)
 
-	logLevel := getEnv("PLAIN_CILOG_LEVEL", "debug")
+	logLevel := getEnv("PLAIN_CI_LOG_LEVEL", "debug")
 	loglevel, err := logrus.ParseLevel(logLevel)
 	if err != nil {
 		logrus.SetLevel(logrus.DebugLevel)

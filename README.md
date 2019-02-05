@@ -48,7 +48,7 @@ the status of the build.
 
 create a token for plain-ci
 * https://github.com/settings/tokens
-when starting plain-ci, set the token in **env var** ```PLAIN_CIGITHUB_TOKEN```
+when starting plain-ci, set the token in **env var** ```PLAIN_CI_GITHUB_TOKEN```
 
 create a Webhook for your github project
 + http://yourIpAddress:12345/hook/github

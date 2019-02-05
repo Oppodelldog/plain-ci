@@ -46,11 +46,11 @@ func executeScript(ctx context.Context, filePath string, build Build) {
 	cmd := exec.CommandContext(ctx, filePath)
 
 	cmd.Env = []string{
-		"PLAIN_CIBUILD_ID=" + build.ID,
-		"PLAIN_CIREPO_URL=" + build.RepoURL,
-		"PLAIN_CICOMMIT_HASH=" + build.CommitHash,
-		"PLAIN_CIORIGINATOR=" + build.Originator,
-		"PLAIN_CIERROR=" + build.Error,
+		"PLAIN_CI_BUILD_ID=" + build.ID,
+		"PLAIN_CI_REPO_URL=" + build.RepoURL,
+		"PLAIN_CI_COMMIT_HASH=" + build.CommitHash,
+		"PLAIN_CI_ORIGINATOR=" + build.Originator,
+		"PLAIN_CI_ERROR=" + build.Error,
 	}
 
 	output, err := cmd.CombinedOutput()
