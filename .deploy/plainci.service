@@ -1,0 +1,19 @@
+[Unit]
+Description=plain-ci continous integration server
+After=network.target
+
+[Service]
+EnvironmentFile=/myHostedServices/plain-ci/.env
+ExecStart=/myHostedServices/plain-ci/simpleci
+KillMode=process
+Restart=on-failure
+Type=exec
+WorkingDirectory=/srv/plain-ci
+User=plainci
+Group=plainci
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=plainci
+
+[Install]
+WantedBy=multi-user.target

@@ -97,15 +97,19 @@ func RenderBuildPage(w io.Writer, buildId string) error {
 		})
 }
 
+// (has a leading slash to work with static assets libray)
+const templatesBasePath = "/templates"
+
 func getPartials() []string {
-	partialsPath := path.Join("/templates", "partials")
+
+	partialsPath := path.Join(templatesBasePath, "partials")
 	return []string{
 		path.Join(partialsPath, "logo.html"),
 		path.Join(partialsPath, "head.html")}
 }
 
 func newPageTemplate(pageFileName string) (*template.Template, error) {
-	pageFilePath := path.Join("/templates", pageFileName)
+	pageFilePath := path.Join(templatesBasePath, pageFileName)
 	name := filepath.Base(pageFilePath)
 
 	t := template.New(name)
