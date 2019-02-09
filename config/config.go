@@ -50,6 +50,12 @@ var IdleTimeout time.Duration
 //GracefulShutdownPeriod seconds to wait for api server to shutdown while shutting down the service
 var GracefulShutdownPeriod time.Duration
 
+//UseStaticFiles may be set to false during development to not use static assets
+var UseStaticFiles bool
+
+//AbsoluteAssetsPath must be set when UseStaticFiles is set to false
+var AbsoluteAssetsPath string
+
 func init() {
 
 	BuildDir = getEnv("PLAIN_CI_BUILD_DIR", "/tmp/plain-ci")
@@ -83,6 +89,22 @@ func init() {
 	if err != nil {
 		panic(fmt.Sprintf("could not create buildDir '%s': %v", BuildDir, err))
 	}
+
+	UseStaticFiles = getEnvBool("PLAIN_CI_USE_STATIC_FILE", true)
+	AbsoluteAssetsPath = getEnv("PLAIN_CI_ABSOLUTE_ASSETS_PATH", "")
+}
+
+func getEnvBool(key string, def bool) bool {
+	if _, ok := os.LookupEnv(key); !ok {
+		return def
+	}
+
+	val, err := strconv.ParseBool(os.Getenv(key))
+	if err != nil {
+		return def
+	}
+	return val
+
 }
 
 func getEnv(key, def string) string {

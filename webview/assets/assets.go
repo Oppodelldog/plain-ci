@@ -1,10 +1,9 @@
 package assets
 
 import (
+	"github.com/Oppodelldog/plainci/config"
 	"github.com/go-playground/statics/static"
 )
-
-const assetsPath = "./webview/assets"
 
 var Templates *static.Files
 var Images *static.Files
@@ -13,9 +12,9 @@ func init() {
 	var err error
 
 	config := &static.Config{
-		UseStaticFiles: true,
+		UseStaticFiles: config.UseStaticFiles,
 		FallbackToDisk: false,
-		AbsPkgPath:     assetsPath,
+		AbsPkgPath:     config.AbsoluteAssetsPath,
 	}
 
 	Templates, err = newStaticTemplates(config)
