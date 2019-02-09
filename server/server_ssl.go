@@ -13,7 +13,7 @@ func startHttpsServer(wait chan bool) *http.Server {
 
 	m := newRouter()
 
-	addr := fmt.Sprintf("0.0.0.0:%v", config.ServerPortTLS)
+	addr := fmt.Sprintf("%s:%s", config.ServerAddressBindTLS, config.ServerPortTLS)
 	logrus.Infof("Staring https server on %v", addr)
 
 	srv := &http.Server{

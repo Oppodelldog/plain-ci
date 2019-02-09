@@ -10,7 +10,7 @@ import (
 
 func startHttpServer(wait chan bool) *http.Server {
 
-	addr := fmt.Sprintf("0.0.0.0:%v", config.ServerPort)
+	addr := fmt.Sprintf("%s:%s", config.ServerAddressBind, config.ServerPort)
 	logrus.Infof("binding http on %v", addr)
 
 	srv := &http.Server{
