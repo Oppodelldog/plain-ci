@@ -3,10 +3,11 @@ package build
 import (
 	"context"
 	"fmt"
-	"github.com/Oppodelldog/plainci/config"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"time"
+
+	"github.com/Oppodelldog/plainci/config"
+	"github.com/sirupsen/logrus"
 )
 
 var buildQueue []*Build

@@ -2,10 +2,11 @@ package build
 
 import (
 	"context"
+	"os"
+
 	"github.com/sirupsen/logrus"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
-	"os"
 )
 
 func prepareGitRepository(ctx context.Context, repoURL string, buildRev string) error {

@@ -2,12 +2,13 @@ package server
 
 import (
 	"context"
-	"github.com/Oppodelldog/plainci/config"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/Oppodelldog/plainci/config"
+	"github.com/sirupsen/logrus"
 )
 
 func Start() {

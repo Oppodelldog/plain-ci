@@ -2,8 +2,9 @@ package build
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 const preBuildNotifyName = "pre"

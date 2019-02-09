@@ -1,9 +1,10 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/Oppodelldog/plainci/webview/assets"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 func newRouter() *mux.Router {

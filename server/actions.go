@@ -1,10 +1,11 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/Oppodelldog/plainci/build"
 	"github.com/Oppodelldog/plainci/webview"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func abortBuild(writer http.ResponseWriter, request *http.Request) {

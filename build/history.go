@@ -2,12 +2,13 @@ package build
 
 import (
 	"fmt"
-	"github.com/Oppodelldog/plainci/config"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/Oppodelldog/plainci/config"
+	"github.com/sirupsen/logrus"
 )
 
 func GetAllBuilds() map[string][]int {

@@ -3,8 +3,9 @@ package server
 import (
 	"encoding/binary"
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 func writeJson(writer http.ResponseWriter, data interface{}) {

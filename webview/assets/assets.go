@@ -11,18 +11,18 @@ var Images *static.Files
 func init() {
 	var err error
 
-	config := &static.Config{
+	cfg := &static.Config{
 		UseStaticFiles: config.UseStaticFiles,
 		FallbackToDisk: false,
 		AbsPkgPath:     config.AbsoluteAssetsPath,
 	}
 
-	Templates, err = newStaticTemplates(config)
+	Templates, err = newStaticTemplates(cfg)
 	if err != nil {
 		panic(err)
 	}
 
-	Images, err = newStaticImages(config)
+	Images, err = newStaticImages(cfg)
 	if err != nil {
 		panic(err)
 	}

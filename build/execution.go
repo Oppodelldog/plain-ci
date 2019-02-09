@@ -3,11 +3,12 @@ package build
 import (
 	"context"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
 	"path"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) error {

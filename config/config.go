@@ -2,10 +2,11 @@ package config
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 // BuildDir defines a folder in which plain-ci will perform its build actions

@@ -2,11 +2,12 @@ package build
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os/exec"
 	"path"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 func triggerNotifyApi(ctx context.Context, buildStepName string, postBuild NotificationFunc, build Build, scriptDir string) {

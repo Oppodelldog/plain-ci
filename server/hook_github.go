@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/Oppodelldog/plainci/build"
 	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
-	"net/http"
-	"time"
 )
 
 type GithubWebHook struct {

@@ -2,10 +2,11 @@ package server
 
 import (
 	"fmt"
-	"github.com/Oppodelldog/plainci/config"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
+
+	"github.com/Oppodelldog/plainci/config"
+	"github.com/sirupsen/logrus"
 )
 
 func startHttpServer(wait chan bool) *http.Server {

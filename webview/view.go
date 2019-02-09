@@ -1,12 +1,13 @@
 package webview
 
 import (
-	"github.com/Oppodelldog/plainci/build"
-	"github.com/Oppodelldog/plainci/webview/assets"
 	"html/template"
 	"io"
 	"path"
 	"path/filepath"
+
+	"github.com/Oppodelldog/plainci/build"
+	"github.com/Oppodelldog/plainci/webview/assets"
 )
 
 func RenderIndexPage(w io.Writer) error {

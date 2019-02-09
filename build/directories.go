@@ -1,10 +1,11 @@
 package build
 
 import (
-	"github.com/Oppodelldog/plainci/config"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/Oppodelldog/plainci/config"
 )
 
 func getRepoPath(repoUrl string) string {

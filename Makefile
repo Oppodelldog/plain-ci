@@ -1,6 +1,9 @@
 BUILD_ARTIFACTS = ".build-artifiacts"
 BINARY_NAME = "plainci"
 
+fmt: ## gofmt and goimports all go files
+	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
+
 generate-assets: ## generates static assets
 	statics -i=webview/assets/templates -o=webview/assets/templates.go -pkg=assets -group=Templates -ignore=\.gitignore -prefix=webview/assets
 	statics -i=webview/assets/images    -o=webview/assets/images.go -pkg=assets -group=Images -ignore=\.gitignore -prefix=webview/assets

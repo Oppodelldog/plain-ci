@@ -3,10 +3,11 @@ package server
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/Oppodelldog/plainci/config"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"path"
+
+	"github.com/Oppodelldog/plainci/config"
+	"github.com/sirupsen/logrus"
 )
 
 func startHttpsServer(wait chan bool) *http.Server {
