@@ -11,8 +11,14 @@ import (
 // BuildDir defines a folder in which plain-ci will perform its build actions
 var BuildDir string
 
+// ServerAddressBind defines the network interface to bind the http listener to
+var ServerAddressBind string
+
 // ServerPort for API like hooks or REST access
 var ServerPort string
+
+// ServerAddressBindTLS defines the network interface to bind the https listener to
+var ServerAddressBindTLS string
 
 // ServerPortTLS for secure API like hooks or REST access
 var ServerPortTLS string
@@ -48,7 +54,9 @@ func init() {
 
 	BuildDir = getEnv("PLAIN_CI_BUILD_DIR", "/tmp/plain-ci")
 	ServerPort = getEnv("PLAIN_CI_SERVER_PORT", "10080")
+	ServerAddressBind = getEnv("PLAIN_CI_ADDRESS_BIND", "127.0.0.1")
 	ServerPortTLS = getEnv("PLAIN_CI_SERVER_PORT_TLS", "10443")
+	ServerAddressBindTLS = getEnv("PLAIN_CI_ADDRESS_BIND_TLS", "127.0.0.1")
 	GithubToken = getEnv("PLAIN_CI_GITHUB_TOKEN", "")
 
 	Domain = getEnv("PLAIN_CI_DOMAIN", "www.plain-ci.test")
