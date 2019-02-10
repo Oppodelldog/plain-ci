@@ -1,14 +1,14 @@
 package build
 
-type BuildStatus int
+type Status int
 
 const (
-	Queued   BuildStatus = 0
-	Building BuildStatus = 1
-	Finished BuildStatus = 2
+	Queued   Status = 0
+	Building Status = 1
+	Finished Status = 2
 )
 
-func (status BuildStatus) String() string {
+func (status Status) String() string {
 	names := [...]string{
 		"Queued",
 		"Building",

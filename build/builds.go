@@ -21,7 +21,7 @@ type Build struct {
 	Originator    string                      `json:"originator"`
 	StartedAt     time.Time                   `json:"started_at"`
 	FinishedAt    time.Time                   `json:"finished_at"`
-	Status        BuildStatus                 `json:"status"`
+	Status        Status                      `json:"status"`
 	Error         string                      `json:"error"`
 	Context       context.Context             `json:"-"`
 	CancelFunc    context.CancelFunc          `json:"-"`
@@ -86,7 +86,7 @@ func GetRepositories() []Repository {
 	return repositories
 }
 
-func GetBuildsByState(status BuildStatus) []*Build {
+func GetBuildsByState(status Status) []*Build {
 	var builds []*Build
 	for _, build := range buildQueue {
 		if build.Status == status {
