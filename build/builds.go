@@ -2,7 +2,9 @@ package build
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -32,7 +34,7 @@ func (b *Build) Abort() {
 	b.CancelFunc()
 }
 
-type Repository struct {
+type Project struct {
 	URL      string
 	RepoPath string
 	Builds   []int
@@ -66,23 +68,27 @@ func removeBuild(build *Build) {
 	}
 }
 
-func GetRepositories() []Repository {
-	files, err := ioutil.ReadDir(config.BuildDir)
-	if err != nil {
-		logrus.Errorf("error reading builds dir '%s': %v", config.BuildDir, err)
-		return nil
-	}
+func GetProjects() []Project {
+	var repositories []Project
+	err := filepath.Walk(config.BuildDir, func(f string, info os.FileInfo, err error) error {
+		if info.IsDir() && info.Name() == ".git" {
+			l, _ := filepath.Abs(f + "/../..")
+			if err != nil {
+				logrus.Errorf("error making absolute path of project dir %s: %v", f, err)
+				return nil
+			}
+			repoPath := strings.Replace(l, config.BuildDir+"/", "", -1)
 
-	var repositories []Repository
-	for _, file := range files {
-		if !file.IsDir() {
-			continue
+			repositories = append(repositories, Project{
+				RepoPath: repoPath,
+			})
 		}
-		repositories = append(repositories, Repository{
-			RepoPath: file.Name(),
-		})
-	}
+		return nil
+	})
 
+	if err != nil {
+		logrus.Errorf("error reading project dirs '%s': %v", config.BuildDir, err)
+	}
 	return repositories
 }
 

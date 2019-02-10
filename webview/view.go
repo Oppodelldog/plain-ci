@@ -68,7 +68,21 @@ func RenderAbortPage(abort func(id string) error, w io.Writer, id string) error 
 		})
 }
 
-func RenderBuildsPage(w io.Writer) error {
+func RenderProjectsPage(w io.Writer) error {
+	t, err := newPageTemplate("projects.html")
+	if err != nil {
+		return err
+	}
+
+	return t.Execute(w,
+		struct {
+			Projects []build.Project
+		}{
+			Projects: build.GetProjects(),
+		})
+}
+
+func RenderBuildPage(w io.Writer, projectID string) error {
 	t, err := newPageTemplate("builds.html")
 	if err != nil {
 		return err
@@ -76,25 +90,11 @@ func RenderBuildsPage(w io.Writer) error {
 
 	return t.Execute(w,
 		struct {
-			Repositories []build.Repository
+			Builds    []int
+			ProjectID string
 		}{
-			Repositories: build.GetRepositories(),
-		})
-}
-
-func RenderBuildPage(w io.Writer, buildId string) error {
-	t, err := newPageTemplate("build.html")
-	if err != nil {
-		return err
-	}
-
-	return t.Execute(w,
-		struct {
-			Builds  []int
-			BuildID string
-		}{
-			BuildID: buildId,
-			Builds:  build.GetBuild(buildId),
+			ProjectID: projectID,
+			Builds:    build.GetBuild(projectID),
 		})
 }
 

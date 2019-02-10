@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="">
+{{template "head"}}
+<body>
+{{template "logo"}}
+<h1>Projects</h1>
+{{range .Projects}}
+    <ul>
+        <li>
+            <span>{{ .RepoPath }} [<a href="/webview/project/{{.RepoPath}}">Details</a>]</span>
+        </li>
+    </ul>
+{{end}}
+</body>
+</html>

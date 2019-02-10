@@ -41,7 +41,7 @@ func executeBuild(ctx context.Context, repoURL, commitHash string, buildNo int) 
 
 	logWrite("Build: %v\n", buildNo)
 	logWrite("Date: %v\n", time.Now())
-	logWrite("Repository: %v\n", repoURL)
+	logWrite("Project: %v\n", repoURL)
 	logWrite("Commit-Hash: %v\n", commitHash)
 	if err != nil {
 		panic(err)

@@ -24,9 +24,9 @@ func newRouter(queue Queue, aborter BuildAborter) *mux.Router {
 	m.HandleFunc("/webview", webViewIndex).Methods(http.MethodGet)
 	m.HandleFunc("/webview/queue", webViewQueue).Methods(http.MethodGet)
 	m.HandleFunc("/webview/queue/abort/{id}", createAbortEnabledHandlerFunc(aborter, webviewAbort)).Methods(http.MethodGet)
-	m.HandleFunc("/webview/build", webViewBuilds).Methods(http.MethodGet)
-	m.HandleFunc("/webview/build/{buildId}", webViewBuild).Methods(http.MethodGet)
-	m.HandleFunc("/webview/build/{buildId}/{logId}", webViewLog).Methods(http.MethodGet)
+	m.HandleFunc("/webview/project", webViewProjects).Methods(http.MethodGet)
+	m.HandleFunc("/webview/project/{projectID}", webViewProject).Methods(http.MethodGet)
+	m.HandleFunc("/webview/project/{projectID}/log/{logID}", webViewProjectLog).Methods(http.MethodGet)
 
 	m.PathPrefix("/webview/images/").Handler(http.StripPrefix("/webview", http.FileServer(assets.Images.FS()))).Methods(http.MethodGet)
 

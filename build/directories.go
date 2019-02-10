@@ -2,6 +2,7 @@ package build
 
 import (
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -25,12 +26,13 @@ func getPath(repoURL string) string {
 }
 
 func normalizeUrl(repoURL string) string {
-	tmpPath := repoURL
+	tmpPath := strings.Replace(repoURL, "http://", "", 1)
+	tmpPath = strings.Replace(tmpPath, "https://", "", 1)
 	tmpPath = strings.Replace(tmpPath, "/", "_", -1)
-	tmpPath = strings.Replace(tmpPath, ":", "_", -1)
-	tmpPath = strings.Replace(tmpPath, "\\", "_", -1)
-	tmpPath = strings.Replace(tmpPath, "?", "_", -1)
-	tmpPath = strings.Replace(tmpPath, " ", "_", -1)
+	var gitExtension = ".git"
+	if path.Ext(tmpPath) == gitExtension {
+		tmpPath = tmpPath[:len(tmpPath)-len(gitExtension)]
+	}
 
 	return tmpPath
 }

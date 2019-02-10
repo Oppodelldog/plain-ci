@@ -77,14 +77,14 @@ func webViewQueue(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func webViewLog(writer http.ResponseWriter, request *http.Request) {
+func webViewProjectLog(writer http.ResponseWriter, request *http.Request) {
 	requestParms := newRequestParams(request)
-	if !requestParms.Require("logId", "buildId").Integer("logId").Validate() {
+	if !requestParms.Require("logID", "projectID").Integer("logID").Validate() {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	writer.WriteHeader(http.StatusOK)
-	err := webview.RenderLogPage(writer, requestParms.GetString("buildId"), requestParms.GetInt("logId"))
+	err := webview.RenderLogPage(writer, requestParms.GetString("projectID"), requestParms.GetInt("logID"))
 	if err != nil {
 		logrus.Errorf("error rendering log page: %v", err)
 	}
@@ -104,22 +104,22 @@ func webviewAbort(aborter BuildAborter, writer http.ResponseWriter, request *htt
 	}
 }
 
-func webViewBuilds(writer http.ResponseWriter, request *http.Request) {
+func webViewProjects(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
-	err := webview.RenderBuildsPage(writer)
+	err := webview.RenderProjectsPage(writer)
 	if err != nil {
-		logrus.Errorf("error rendering builds page: %v", err)
+		logrus.Errorf("error rendering projects page: %v", err)
 	}
 }
 
-func webViewBuild(writer http.ResponseWriter, request *http.Request) {
+func webViewProject(writer http.ResponseWriter, request *http.Request) {
 	requestParms := newRequestParams(request)
-	if !requestParms.Require("buildId").Validate() {
+	if !requestParms.Require("projectID").Validate() {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	writer.WriteHeader(http.StatusOK)
-	err := webview.RenderBuildPage(writer, requestParms.GetString("buildId"))
+	err := webview.RenderBuildPage(writer, requestParms.GetString("projectID"))
 	if err != nil {
 		logrus.Errorf("error rendering build page: %v", err)
 	}

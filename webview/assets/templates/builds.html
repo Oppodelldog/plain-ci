@@ -3,11 +3,16 @@
 {{template "head"}}
 <body>
 {{template "logo"}}
-<h1>Build</h1>
-{{range .Repositories}}
+<h1>Project</h1>
+<h4>{{.ProjectID}}</h4>
+
+{{range .Builds}}
     <ul>
         <li>
-            <span>{{ .RepoPath }} [<a href="/webview/build/{{.RepoPath}}">Details</a>]</span>
+            <span>{{ . }} 
+                [<a href="/webview/project/{{$.ProjectID}}/log/{{ . }}">
+                    Log
+                </a>] </span>
         </li>
     </ul>
 {{end}}
