@@ -10,19 +10,18 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func triggerNotifyApi(build *Build, buildStepName string, scriptDir string) {
+func triggerNotifyApi(build Build, buildStepName string, scriptDir string) {
 	if notify, ok := build.Notifications[buildStepName]; ok && notify != nil {
-		err := notify(*build)
+		err := notify(build)
 		if err != nil {
 			logrus.Errorf("error during %s-build action: %v", buildStepName, err)
 		}
 	}
 
-	err := simpleNotification(build.Context, scriptDir, *build)
+	err := simpleNotification(build.Context, scriptDir, build)
 	if err != nil {
 		logrus.Errorf("error during %s-build action: %v", buildStepName, err)
 	}
-
 }
 
 func simpleNotification(ctx context.Context, dir string, build Build) error {

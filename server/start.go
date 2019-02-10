@@ -4,11 +4,13 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/Oppodelldog/plainci/build"
+
 	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 )
 
-func Start(ctx context.Context, queue Queue) chan bool {
+func Start(ctx context.Context, queue *build.Queue) chan bool {
 	shutdownChannel := make(chan bool)
 
 	go func() {

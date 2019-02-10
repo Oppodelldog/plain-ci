@@ -6,13 +6,15 @@ import (
 	"net/http"
 	"path"
 
+	"github.com/Oppodelldog/plainci/build"
+
 	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 )
 
-func startHttpsServer(queue Queue, wait chan bool) *http.Server {
+func startHttpsServer(queue *build.Queue, wait chan bool) *http.Server {
 
-	m := newRouter(queue)
+	m := newRouter(queue, queue)
 
 	addr := fmt.Sprintf("%s:%s", config.ServerAddressBindTLS, config.ServerPortTLS)
 	logrus.Infof("Staring https server on %v", addr)

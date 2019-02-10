@@ -7,15 +7,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func newRouter(queue Queue) *mux.Router {
+func newRouter(queue Queue, aborter BuildAborter) *mux.Router {
 	m := mux.NewRouter()
 	m.HandleFunc("/healthcheck", healthcheck).Methods(http.MethodGet)
 
-	m.HandleFunc("/hook/simple", enableQueueHook(queue, hookSimple)).Methods(http.MethodPost)
-	m.HandleFunc("/hook/github", enableQueueHook(queue, hookGithub)).Methods(http.MethodPost)
+	m.HandleFunc("/hook/simple", createQueueEnabledHandlerFunc(queue, hookSimple)).Methods(http.MethodPost)
+	m.HandleFunc("/hook/github", createQueueEnabledHandlerFunc(queue, hookGithub)).Methods(http.MethodPost)
 
 	m.HandleFunc("/queue", getBuildQueue).Methods(http.MethodGet)
-	m.HandleFunc("/queue/abort/{id}", abortBuild).Methods(http.MethodPost)
+	m.HandleFunc("/queue/abort/{id}", createAbortEnabledHandlerFunc(aborter, abortBuild)).Methods(http.MethodPost)
 
 	m.HandleFunc("/build", getAllBuilds).Methods(http.MethodGet)
 	m.HandleFunc("/build/{buildId}", getBuild).Methods(http.MethodGet)
@@ -23,7 +23,7 @@ func newRouter(queue Queue) *mux.Router {
 
 	m.HandleFunc("/webview", webViewIndex).Methods(http.MethodGet)
 	m.HandleFunc("/webview/queue", webViewQueue).Methods(http.MethodGet)
-	m.HandleFunc("/webview/queue/abort/{id}", webviewAbort).Methods(http.MethodGet)
+	m.HandleFunc("/webview/queue/abort/{id}", createAbortEnabledHandlerFunc(aborter, webviewAbort)).Methods(http.MethodGet)
 	m.HandleFunc("/webview/build", webViewBuilds).Methods(http.MethodGet)
 	m.HandleFunc("/webview/build/{buildId}", webViewBuild).Methods(http.MethodGet)
 	m.HandleFunc("/webview/build/{buildId}/{logId}", webViewLog).Methods(http.MethodGet)

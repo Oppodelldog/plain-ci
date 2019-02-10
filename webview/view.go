@@ -54,7 +54,7 @@ func RenderLogPage(w io.Writer, buildId string, logId int) error {
 		})
 }
 
-func RenderAbortPage(w io.Writer, id string) error {
+func RenderAbortPage(abort func(id string) error, w io.Writer, id string) error {
 	t, err := newPageTemplate("abort.html")
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ func RenderAbortPage(w io.Writer, id string) error {
 		struct {
 			Error error
 		}{
-			Error: build.AbortBuild(id),
+			Error: abort(id),
 		})
 }
 

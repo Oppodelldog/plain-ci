@@ -2,8 +2,8 @@ package build
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
+	"sync"
 	"time"
 
 	"github.com/Oppodelldog/plainci/config"
@@ -21,7 +21,6 @@ type Build struct {
 	Originator    string                      `json:"originator"`
 	StartedAt     time.Time                   `json:"started_at"`
 	FinishedAt    time.Time                   `json:"finished_at"`
-	Done          bool                        `json:"done"`
 	Status        BuildStatus                 `json:"status"`
 	Error         string                      `json:"error"`
 	Context       context.Context             `json:"-"`
@@ -48,30 +47,23 @@ func GetBuildQueueList() []Build {
 	return newBuilds
 }
 
-func FindBuildIndex(id string) (int, *Build, bool) {
-	for index, build := range buildQueue {
-		if build.ID == id {
-			return index, build, true
-		}
-	}
-	return 0, nil, false
-}
-
-func AbortBuild(id string) error {
-	if index, build, ok := FindBuildIndex(id); ok {
-		build.Abort()
-		removeBuild(index)
-
-		return nil
-	} else {
-		return fmt.Errorf("build %v not found", id)
-	}
-}
-
-func removeBuild(i int) {
+func removeBuildByIndex(i int) {
 	buildQueue[i] = buildQueue[len(buildQueue)-1]
 	buildQueue[len(buildQueue)-1] = nil
 	buildQueue = buildQueue[:len(buildQueue)-1]
+}
+
+func removeBuild(build *Build) {
+	m := sync.Mutex{}
+	m.Lock()
+	defer m.Unlock()
+
+	for index, b := range buildQueue {
+		if b.ID == build.ID {
+			removeBuildByIndex(index)
+			return
+		}
+	}
 }
 
 func GetRepositories() []Repository {
@@ -94,11 +86,26 @@ func GetRepositories() []Repository {
 	return repositories
 }
 
+func GetBuildsByState(status BuildStatus) []*Build {
+	var builds []*Build
+	for _, build := range buildQueue {
+		if build.Status == status {
+			builds = append(builds, build)
+		}
+	}
+	return builds
+}
+
 func GetNextBuild() (*Build, bool) {
+	if len(GetBuildsByState(Building)) > 0 {
+		return nil, false
+	}
+
 	for _, build := range buildQueue {
 		if build.Status == Queued {
 			return build, true
 		}
 	}
+
 	return nil, false
 }

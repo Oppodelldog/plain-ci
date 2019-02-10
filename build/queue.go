@@ -2,6 +2,7 @@ package build
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -65,10 +66,31 @@ func (q *Queue) NewBuild(repoURL string, commit string, originator string, custo
 	}
 }
 
-func initializeBuild(build *Build) {
-	build.Context, build.CancelFunc = context.WithDeadline(context.Background(), time.Now().Add(time.Hour*2))
+func (q *Queue) AbortBuild(id string) error {
+	if _, build, ok := q.findBuildIndex(id); ok {
+		build.Abort()
 
-	triggerNotifyApi(build, preBuildNotifyName, getPreNotificationScriptsDir())
+		return nil
+	} else {
+		return fmt.Errorf("build %v not found", id)
+	}
+}
+
+func (q *Queue) findBuildIndex(id string) (int, *Build, bool) {
+	for index, build := range buildQueue {
+		if build.ID == id {
+			return index, build, true
+		}
+	}
+	return 0, nil, false
+}
+
+func (q *Queue) initializeBuild(build *Build) {
+	defer removeBuild(build)
+
+	build.Context, build.CancelFunc = context.WithDeadline(q.ctx, time.Now().Add(time.Hour*2))
+
+	triggerNotifyApi(*build, preBuildNotifyName, getPreNotificationScriptsDir())
 
 	build.Status = Building
 
@@ -79,10 +101,9 @@ func initializeBuild(build *Build) {
 	}
 
 	build.FinishedAt = time.Now()
-	build.Done = true
 	build.Status = Finished
 
-	triggerNotifyApi(build, postBuildNotifyName, getPostNotificationScriptsDir())
+	triggerNotifyApi(*build, postBuildNotifyName, getPostNotificationScriptsDir())
 }
 
 func startBuild(build *Build, buildNo int, repoURL, commit string) error {
@@ -118,7 +139,7 @@ func (q *Queue) start() {
 			default:
 				if build, ok := GetNextBuild(); ok {
 					logrus.Infof("queue starting build (%s, %s, %v)", build.RepoURL, build.CommitHash, build.No)
-					initializeBuild(build)
+					go q.initializeBuild(build)
 				}
 				time.Sleep(time.Second)
 			}

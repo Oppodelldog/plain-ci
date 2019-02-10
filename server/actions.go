@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func abortBuild(writer http.ResponseWriter, request *http.Request) {
+func abortBuild(aborter BuildAborter, writer http.ResponseWriter, request *http.Request) {
 
 	requestParms := newRequestParams(request)
 	if !requestParms.Require("id").Validate() {
@@ -16,7 +16,7 @@ func abortBuild(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err := build.AbortBuild(requestParms.GetString("id"))
+	err := aborter.AbortBuild(requestParms.GetString("id"))
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		return
@@ -90,7 +90,7 @@ func webViewLog(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func webviewAbort(writer http.ResponseWriter, request *http.Request) {
+func webviewAbort(aborter BuildAborter, writer http.ResponseWriter, request *http.Request) {
 	requestParms := newRequestParams(request)
 	if !requestParms.Require("id").Validate() {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -98,7 +98,7 @@ func webviewAbort(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	writer.WriteHeader(http.StatusOK)
-	err := webview.RenderAbortPage(writer, requestParms.GetString("id"))
+	err := webview.RenderAbortPage(aborter.AbortBuild, writer, requestParms.GetString("id"))
 	if err != nil {
 		logrus.Errorf("error rendering abort page: %v", err)
 	}
