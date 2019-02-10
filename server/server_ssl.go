@@ -10,9 +10,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func startHttpsServer(wait chan bool) *http.Server {
+func startHttpsServer(queue Queue, wait chan bool) *http.Server {
 
-	m := newRouter()
+	m := newRouter(queue)
 
 	addr := fmt.Sprintf("%s:%s", config.ServerAddressBindTLS, config.ServerPortTLS)
 	logrus.Infof("Staring https server on %v", addr)

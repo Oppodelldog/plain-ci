@@ -193,7 +193,7 @@ type GithubCommitStatusNotification struct {
 	Context     string `json:"context"`
 }
 
-func hookGithub(writer http.ResponseWriter, request *http.Request) {
+func hookGithub(queue Queue, writer http.ResponseWriter, request *http.Request) {
 	if request.Method != "POST" {
 		writer.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -207,7 +207,7 @@ func hookGithub(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	go build.New(webhook.Repository.CloneURL, webhook.After, "hook:github", createGithubPreBuildFunc(webhook), createGithubPostBuildFunc(webhook))
+	queue.NewBuild(webhook.Repository.CloneURL, webhook.After, "hook:github", createGithubPreBuildFunc(webhook), createGithubPostBuildFunc(webhook))
 
 	writer.WriteHeader(http.StatusNoContent)
 }

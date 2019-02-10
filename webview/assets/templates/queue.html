@@ -15,7 +15,7 @@
                 [<a href="/webview/build/{{.RepoPath}}/{{ .No }}">
                     Log
                 </a>]
-                {{ if not .Done}}
+                {{ if eq .Status 1}}
                     -
                     [<a href="/webview/queue/abort/{{.ID}}">
                     Abort
@@ -25,9 +25,9 @@
         <li><span>RepoURL</span> <span>{{ .RepoURL }}</span></li>
         <li><span>Commit-Hash</span> <span>{{ .CommitHash }}</span></li>
         <li><span>Originator</span> <span>{{ .Originator }}</span></li>
-        <li><span>StartedAt</span> <span>{{ .StartedAt }}</span></li>
-        <li><span>FinishedAt</span> <span>{{ .FinishedAt }}</span></li>
-        <li><span>Done</span> <span>{{ .Done }}</span></li>
+        <li><span>StartedAt</span> <span>{{ .StartedAt.Format "Mon 02 Jan 15:04:05" }}</span></li>
+        <li><span>FinishedAt</span> <span>{{ .FinishedAt.Format "Mon 02 Jan 15:04:05" }}</span></li>
+        <li><span>Status</span> <span>{{ .Status }}</span></li>
         <li><span>Error</span> <span>{{ .Error }}</span></li>
 
     </ul>

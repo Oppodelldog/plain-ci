@@ -7,12 +7,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func newRouter() *mux.Router {
+func newRouter(queue Queue) *mux.Router {
 	m := mux.NewRouter()
 	m.HandleFunc("/healthcheck", healthcheck).Methods(http.MethodGet)
 
-	m.HandleFunc("/hook/simple", hookSimple).Methods(http.MethodPost)
-	m.HandleFunc("/hook/github", hookGithub).Methods(http.MethodPost)
+	m.HandleFunc("/hook/simple", enableQueueHook(queue, hookSimple)).Methods(http.MethodPost)
+	m.HandleFunc("/hook/github", enableQueueHook(queue, hookGithub)).Methods(http.MethodPost)
 
 	m.HandleFunc("/queue", getBuildQueue).Methods(http.MethodGet)
 	m.HandleFunc("/queue/abort/{id}", abortBuild).Methods(http.MethodPost)

@@ -3,34 +3,35 @@ package server
 import (
 	"context"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/Oppodelldog/plainci/config"
 	"github.com/sirupsen/logrus"
 )
 
-func Start() {
+func Start(ctx context.Context, queue Queue) chan bool {
+	shutdownChannel := make(chan bool)
 
-	sigChannel := make(chan os.Signal)
-	signal.Notify(sigChannel, os.Interrupt, syscall.SIGTERM)
+	go func() {
 
-	httpWait := make(chan bool)
-	httpServer := startHttpServer(httpWait)
+		httpWait := make(chan bool)
+		httpServer := startHttpServer(httpWait)
 
-	httpsWait := make(chan bool)
-	httpsServer := startHttpsServer(httpsWait)
+		httpsWait := make(chan bool)
+		httpsServer := startHttpsServer(queue, httpsWait)
 
-	<-sigChannel
+		<-ctx.Done()
 
-	go gracefulShutdown(httpsServer)
-	go gracefulShutdown(httpServer)
+		go gracefulShutdown(httpsServer)
+		go gracefulShutdown(httpServer)
 
-	<-httpWait
-	<-httpsWait
+		<-httpWait
+		<-httpsWait
 
-	logrus.Info("Servers have stopped - shutdown.")
+		logrus.Info("Servers have stopped - shutdown.")
+		close(shutdownChannel)
+	}()
+
+	return shutdownChannel
 }
 
 func gracefulShutdown(server *http.Server) {

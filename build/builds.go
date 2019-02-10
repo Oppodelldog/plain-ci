@@ -13,18 +13,24 @@ import (
 var buildQueue []*Build
 
 type Build struct {
-	ID         string             `json:"id"`
-	No         int                `json:"no"`
-	RepoURL    string             `json:"repo_url"`
-	RepoPath   string             `json:"repo_path"`
-	CommitHash string             `json:"commit_hash"`
-	Originator string             `json:"originator"`
-	StartedAt  time.Time          `json:"started_at"`
-	FinishedAt time.Time          `json:"finished_at"`
-	Done       bool               `json:"done"`
-	Error      string             `json:"error"`
-	Context    context.Context    `json:"-"`
-	CancelFunc context.CancelFunc `json:"-"`
+	ID            string                      `json:"id"`
+	No            int                         `json:"no"`
+	RepoURL       string                      `json:"repo_url"`
+	RepoPath      string                      `json:"repo_path"`
+	CommitHash    string                      `json:"commit_hash"`
+	Originator    string                      `json:"originator"`
+	StartedAt     time.Time                   `json:"started_at"`
+	FinishedAt    time.Time                   `json:"finished_at"`
+	Done          bool                        `json:"done"`
+	Status        BuildStatus                 `json:"status"`
+	Error         string                      `json:"error"`
+	Context       context.Context             `json:"-"`
+	CancelFunc    context.CancelFunc          `json:"-"`
+	Notifications map[string]NotificationFunc `json:"-"`
+}
+
+func (b *Build) Abort() {
+	b.CancelFunc()
 }
 
 type Repository struct {
@@ -42,16 +48,24 @@ func GetBuildQueueList() []Build {
 	return newBuilds
 }
 
-func AbortBuild(id string) error {
+func FindBuildIndex(id string) (int, *Build, bool) {
 	for index, build := range buildQueue {
 		if build.ID == id {
-			build.CancelFunc()
-			removeBuild(index)
-			return nil
+			return index, build, true
 		}
 	}
+	return 0, nil, false
+}
 
-	return fmt.Errorf("build %v not found", id)
+func AbortBuild(id string) error {
+	if index, build, ok := FindBuildIndex(id); ok {
+		build.Abort()
+		removeBuild(index)
+
+		return nil
+	} else {
+		return fmt.Errorf("build %v not found", id)
+	}
 }
 
 func removeBuild(i int) {
@@ -78,4 +92,13 @@ func GetRepositories() []Repository {
 	}
 
 	return repositories
+}
+
+func GetNextBuild() (*Build, bool) {
+	for _, build := range buildQueue {
+		if build.Status == Queued {
+			return build, true
+		}
+	}
+	return nil, false
 }

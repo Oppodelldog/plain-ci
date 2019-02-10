@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Oppodelldog/plainci/build"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,7 +12,7 @@ type SimpleHookPayload struct {
 	REV string
 }
 
-func hookSimple(writer http.ResponseWriter, request *http.Request) {
+func hookSimple(queue Queue, writer http.ResponseWriter, request *http.Request) {
 	if request.Method != "POST" {
 		writer.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -27,7 +26,7 @@ func hookSimple(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	go build.New(payload.URL, payload.REV, "hook:simple", nil, nil)
+	queue.NewBuild(payload.URL, payload.REV, "hook:simple", nil, nil)
 
 	writer.WriteHeader(http.StatusNoContent)
 }
