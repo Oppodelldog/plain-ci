@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -59,6 +60,10 @@ func GetBuildQueueList() []Build {
 	for _, build := range buildQueue {
 		newBuilds = append(newBuilds, *build)
 	}
+
+	sort.Slice(newBuilds, func(i, j int) bool {
+		return newBuilds[i].No < newBuilds[j].No
+	})
 
 	return newBuilds
 }

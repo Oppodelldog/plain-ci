@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"path"
 	"regexp"
+	"sort"
 )
 
 func GetAllBuilds() map[string][]LogFile {
@@ -45,6 +46,10 @@ func GetBuildLogs(repoDir string) []LogFile {
 		}
 		logFiles = append(logFiles, logFile)
 	}
+
+	sort.Slice(logFiles, func(i, j int) bool {
+		return logFiles[i].Number > logFiles[j].Number
+	})
 
 	return logFiles
 }
