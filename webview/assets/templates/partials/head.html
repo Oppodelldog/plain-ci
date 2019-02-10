@@ -15,6 +15,8 @@
                 --primary-background: #006b81;
                 --red: #ff0000;
                 --red-background: #641e21;
+                --green: #00ff00;
+                --green-background: #008400;
 
                 --content-margin-left: 12px;
                 --font-size-12: 12pt;
@@ -57,6 +59,9 @@
                 list-style-type: none;
             }
 
+            .build-Success{color: var(--green);}
+            .build-Failure{color: var(--red);}
+            .build-Aborted{color: grey;}
             .success-notification, .error-notification {
                 margin: 0 var(--content-margin-left) 0 var(--content-margin-left);
                 display: block;
