@@ -43,16 +43,17 @@ func (q *Queue) NewBuild(repoURL string, commit string, originator string, custo
 		logrus.Errorf("error generating build ID: %v", err)
 		return
 	}
-	buildNo, err := getNextBuildNo(repoURL)
+	buildLogFile, err := getNextBuildLogfile(repoURL)
 	if err != nil {
 		logrus.Errorf("Error starting build for %s on commit %s", repoURL, commit)
 		return
 	}
 
-	q.newBuildsChannel <- &Build{
+	 build := &Build{
 		ID:         buildID,
 		RepoPath:   normalizeUrl(repoURL),
-		No:         buildNo,
+		No:         buildLogFile.Number,
+		LogFile:    buildLogFile,
 		Originator: originator,
 		RepoURL:    repoURL,
 		CommitHash: commit,
@@ -64,6 +65,8 @@ func (q *Queue) NewBuild(repoURL string, commit string, originator string, custo
 			postBuildNotifyName: customPostBuildNotify,
 		},
 	}
+	build.ChangeStatus(Queued)
+	q.newBuildsChannel <- build
 }
 
 func (q *Queue) AbortBuild(id string) error {
@@ -92,29 +95,31 @@ func (q *Queue) initializeBuild(build *Build) {
 
 	triggerNotifyApi(*build, preBuildNotifyName, getPreNotificationScriptsDir())
 
+	build.ChangeStatus(Building)
 	build.Status = Building
 
-	err := startBuild(build, build.No, build.RepoURL, build.CommitHash)
+	err := startBuild(build)
 	if err != nil {
 		logrus.Errorf("error during Build: %v", err)
 		build.Error = err.Error()
+		build.ChangeResult(Failure)
 	}
 
 	build.FinishedAt = time.Now()
-	build.Status = Finished
+	build.ChangeStatus(Finished)
 
 	triggerNotifyApi(*build, postBuildNotifyName, getPostNotificationScriptsDir())
 }
 
-func startBuild(build *Build, buildNo int, repoURL, commit string) error {
+func startBuild(build *Build) error {
 
-	logrus.Infof("Starting build %v for %s on commit %s", buildNo, repoURL, commit)
-	err := prepareGitRepository(build.Context, repoURL, commit)
+	logrus.Infof("Starting build %v for %s on commit %s", build.LogFile.Number, build.RepoURL, build.CommitHash)
+	err := prepareGitRepository(build.Context, build.RepoURL, build.CommitHash)
 	if err != nil {
 		return err
 	}
 
-	err = executeBuild(build.Context, repoURL, commit, buildNo)
+	err = executeBuild(build)
 	if err != nil {
 		return err
 	}

@@ -90,11 +90,11 @@ func RenderBuildPage(w io.Writer, projectID string) error {
 
 	return t.Execute(w,
 		struct {
-			Builds    []int
+			Builds    []build.LogFile
 			ProjectID string
 		}{
 			ProjectID: projectID,
-			Builds:    build.GetBuild(projectID),
+			Builds:    build.GetBuildLogs(projectID),
 		})
 }
 

@@ -9,8 +9,10 @@
 {{range .Builds}}
     <ul>
         <li>
-            <span>{{ . }} 
-                [<a href="/webview/project/{{$.ProjectID}}/log/{{ . }}">
+            <span>{{ .Number }}
+                {{ if gt .Result 0}}Result: {{ .Result }} {{ end }}
+                {{ if gt .Status 0}}Status: {{ .Status }} {{ end }}
+                [<a href="/webview/project/{{$.ProjectID}}/log/{{ .Number }}">
                     Log
                 </a>] </span>
         </li>

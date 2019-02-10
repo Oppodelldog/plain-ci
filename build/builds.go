@@ -17,6 +17,7 @@ var buildQueue []*Build
 type Build struct {
 	ID            string                      `json:"id"`
 	No            int                         `json:"no"`
+	LogFile       *LogFile                    `json:"-"`
 	RepoURL       string                      `json:"repo_url"`
 	RepoPath      string                      `json:"repo_path"`
 	CommitHash    string                      `json:"commit_hash"`
@@ -24,6 +25,7 @@ type Build struct {
 	StartedAt     time.Time                   `json:"started_at"`
 	FinishedAt    time.Time                   `json:"finished_at"`
 	Status        Status                      `json:"status"`
+	Result        Result                      `json:"result"`
 	Error         string                      `json:"error"`
 	Context       context.Context             `json:"-"`
 	CancelFunc    context.CancelFunc          `json:"-"`
@@ -32,6 +34,18 @@ type Build struct {
 
 func (b *Build) Abort() {
 	b.CancelFunc()
+	b.ChangeStatus(Finished)
+	b.ChangeResult(Aborted)
+}
+
+func (b *Build) ChangeStatus(status Status) {
+	b.LogFile.ChangeStatus(status)
+	b.Status = b.LogFile.Status
+}
+
+func (b *Build) ChangeResult(result Result) {
+	b.LogFile.ChangeResult(result)
+	b.Result = b.LogFile.Result
 }
 
 type Project struct {

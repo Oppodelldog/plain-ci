@@ -12,10 +12,10 @@
         <li><span>No</span>
             <span>
                 {{ .No }}
-                [<a href="/webview/build/{{.RepoPath}}/{{ .No }}">
+                [<a href="/webview/project/{{.RepoPath}}/log/{{ .No }}">
                     Log
                 </a>]
-                {{ if eq .Status 1}}
+                {{ if eq .Status 2}}
                     -
                     [<a href="/webview/queue/abort/{{.ID}}">
                     Abort
@@ -28,6 +28,7 @@
         <li><span>StartedAt</span> <span>{{ .StartedAt.Format "Mon 02 Jan 15:04:05" }}</span></li>
         <li><span>FinishedAt</span> <span>{{ .FinishedAt.Format "Mon 02 Jan 15:04:05" }}</span></li>
         <li><span>Status</span> <span>{{ .Status }}</span></li>
+        <li><span>Result</span> <span>{{ .Result }}</span></li>
         <li><span>Error</span> <span>{{ .Error }}</span></li>
 
     </ul>
