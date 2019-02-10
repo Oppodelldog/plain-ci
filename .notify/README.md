@@ -1,6 +1,6 @@
-# simple ci notification api
+# plain ci notification api
 
-Simple ci is so simple, it has no built in plugins.
+Plain ci is so plain, it has no built in plugins.
 But it provides support for custom actions via its notification api.
 
 Whenever a build reached a noteworthy step, plain-ci will call
