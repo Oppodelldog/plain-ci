@@ -14,8 +14,8 @@ POST https://localhost:10443/hook/simple
 Content-Type: application/json
 
 {
-  "URL": "https://github.com/Oppodelldog/plain-ci.git",
-  "REV": "ba99de688acc32fb4c0778b9b5b74e8ab9a881eb"
+  "URL": "https://github.com/Oppodelldog/docker-dns.git",
+  "REV": "8a7f4f2febb2e5721a608216f6c396b956abcc53"
 }
 
 ###
